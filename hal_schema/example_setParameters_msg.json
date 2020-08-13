@@ -1,0 +1,10 @@
+{
+  "module": "gponhal",
+  "version": "0.0.1",  
+  "action": "setParameters",
+  "reqId" : "100001",
+  "params":
+  [
+     {"name":"Device.X_RDK_ONT.Veip.1.EthernetFlow.Ingress.Q-VLAN.Vid", "type":"unsignedInt", "value": 100}
+  ]
+}
