@@ -167,13 +167,14 @@
           { "$ref": "#/definitions/ontVeipEthernetFlowIngressTagged" },
           { "$ref": "#/definitions/ontVeipEthernetFlowIngressQVlanVid" },
           { "$ref": "#/definitions/ontVeipEthernetFlowEgressTagged" },
-          { "$ref": "#/definitions/ontVeipEthernetFlowEgressQVlanVid" },
+          { "$ref": "#/definitions/ontVeipEthernetFlowEgressQVlanVid" }
       ]
     },
 
     "setParameterOptionalList": {
       "description": "Optional data model parameter list for setParameters action",
       "anyOf": [
+          { "$ref": "#/definitions/ontVeipEthernetFlowEgressQVlanVid" }
       ]
     },
 
@@ -2144,8 +2145,7 @@
     },
 
     "ontVeipInterDomainName": {
-      "description": "This attribute is a character string that provides an optional way to identify the VEIP to a non-OMCI management domain," 
-                     "and expose the default provider brigde configuration. (Access = Read-Only)",
+      "description": "This attribute is a character string that provides an optional way to identify the VEIP to a non-OMCI management domain,and expose the default provider brigde configuration. (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -2567,5 +2567,4 @@
     }
 
   ]
-
 }
