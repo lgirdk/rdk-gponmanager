@@ -22,8 +22,6 @@
                             <func_GetEntry>GponPhy_GetEntry</func_GetEntry>
                             <func_GetParamStringValue>GponPhy_GetParamStringValue</func_GetParamStringValue>
                             <func_GetParamUlongValue>GponPhy_GetParamUlongValue</func_GetParamUlongValue>
-                            <func_GetParamBoolValue>GponPhy_GetParamBoolValue</func_GetParamBoolValue>
-                            <func_SetParamBoolValue>GponPhy_SetParamBoolValue</func_SetParamBoolValue>
                             <func_Validate>GponPhy_Validate</func_Validate>
                             <func_Commit>GponPhy_Commit</func_Commit>
                             <func_Rollback>GponPhy_Rollback</func_Rollback>
@@ -75,14 +73,8 @@
                                 <syntax>uint32</syntax>
                             </parameter>
                             <parameter>
-                                <name>Enable</name>
-                                <type>boolean</type>
-                                <syntax>bool</syntax>
-                                <writable>true</writable>
-                            </parameter>
-                            <parameter>
-                                <name>LinkStatus</name>
-                                <type>string: Up(0),Initializing(1),EstablishingLink(2),NoSignal(3),Disabled(4),Error(5)</type>
+                                <name>Status</name>
+                                <type>string: Up(0),Down(1),Unknown(2),Dormant(3),NotPresent(4),LowerLayerDown(5),Error(6)</type>
                                 <syntax>uint32/mapped</syntax>
                             </parameter>
                             <parameter>
@@ -151,25 +143,12 @@
                                     <objectType>object</objectType>
                                     <functions>
                                         <func_GetParamIntValue>GponPhyVoltage_GetParamIntValue</func_GetParamIntValue>
-                                        <func_SetParamIntValue>GponPhyVoltage_SetParamIntValue</func_SetParamIntValue>
                                     </functions>
                                     <parameters>
                                         <parameter>
                                             <name>VoltageLevel</name>
                                             <type>int</type>
                                             <syntax>int</syntax>
-                                        </parameter>
-                                        <parameter>
-                                            <name>LowerThreshold</name>
-                                            <type>int</type>
-                                            <syntax>int</syntax>
-                                            <writable>true</writable>
-                                        </parameter>
-                                        <parameter>
-                                            <name>UpperThreshold</name>
-                                            <type>int</type>
-                                            <syntax>int</syntax>
-                                            <writable>true</writable>
                                         </parameter>
                                     </parameters>
                                 </object>
@@ -178,20 +157,12 @@
                                     <objectType>object</objectType>
                                     <functions>
                                         <func_GetParamUlongValue>GponPhyBias_GetParamUlongValue</func_GetParamUlongValue>
-                                        <func_GetParamIntValue>GponPhyBias_GetParamIntValue</func_GetParamIntValue>
-                                        <func_SetParamIntValue>GponPhyBias_SetParamIntValue</func_SetParamIntValue>
                                     </functions>
                                     <parameters>
                                         <parameter>
                                             <name>CurrentBias</name>
                                             <type>unsignedInt</type>
                                             <syntax>uint32</syntax>
-                                        </parameter>
-                                        <parameter>
-                                            <name>HighBias</name>
-                                            <type>unsignedInt</type>
-                                            <syntax>uint32</syntax>
-                                            <writable>true</writable>
                                         </parameter>
                                     </parameters>
                                 </object>
@@ -200,25 +171,12 @@
                                     <objectType>object</objectType>
                                     <functions>
                                         <func_GetParamIntValue>GponPhyTemperature_GetParamIntValue</func_GetParamIntValue>
-                                        <func_SetParamIntValue>GponPhyTemperature_SetParamIntValue</func_SetParamIntValue>
                                     </functions>
                                     <parameters>
                                         <parameter>
                                             <name>CurrentTemp</name>
                                             <type>int</type>
                                             <syntax>int</syntax>
-                                        </parameter>
-                                        <parameter>
-                                            <name>MaxTemp</name>
-                                            <type>int</type>
-                                            <syntax>int</syntax>
-                                            <writable>true</writable>
-                                        </parameter>
-                                        <parameter>
-                                            <name>MinTemp</name>
-                                            <type>int</type>
-                                            <syntax>int</syntax>
-                                            <writable>true</writable>
                                         </parameter>
                                     </parameters>
                                 </object>
@@ -310,11 +268,6 @@
                                         </parameter>
                                         <parameter>
                                             <name>TF</name>
-                                            <type>string: Active(0),Inactive(1)</type>
-                                            <syntax>uint32/mapped</syntax>
-                                        </parameter>
-                                        <parameter>
-                                            <name>LODS</name>
                                             <type>string: Active(0),Inactive(1)</type>
                                             <syntax>uint32/mapped</syntax>
                                         </parameter>
@@ -531,26 +484,22 @@
                                                 <objectType>object</objectType>
                                                 <functions>
                                                     <func_GetParamUlongValue>GponGemEthFlowIngressCvlan_GetParamUlongValue</func_GetParamUlongValue>
-                                                    <func_SetParamUlongValue>GponGemEthFlowIngressCvlan_SetParamUlongValue</func_SetParamUlongValue>
                                                 </functions>
                                                 <parameters>
                                                     <parameter>
                                                         <name>Vid</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
-                                                        <writable>true</writable>
                                                     </parameter>
                                                     <parameter>
                                                         <name>Pcp</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
-                                                        <writable>true</writable>
                                                     </parameter>
                                                     <parameter>
                                                         <name>Dei</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
-                                                        <writable>true</writable>
                                                     </parameter>
                                                 </parameters>
                                             </object>
@@ -682,7 +631,7 @@
                             </parameter>
                             <parameter>
                                 <name>InterDomainName</name>
-                                <type>string(256)</type>
+                                <type>string(25)</type>
                                 <syntax>string</syntax>
                             </parameter>
                             <parameter>
@@ -730,13 +679,11 @@
                                                         <name>Pcp</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
-                                                        <writable>true</writable>
                                                     </parameter>
                                                     <parameter>
                                                         <name>Dei</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
-                                                        <writable>true</writable>
                                                     </parameter>
                                                 </parameters>
                                             </object>
@@ -747,12 +694,14 @@
                                         <objectType>object</objectType>
                                         <functions>
                                             <func_GetParamUlongValue>GponVeipEthFlowEgress_GetParamUlongValue</func_GetParamUlongValue>
+                                            <func_SetParamUlongValue>GponVeipEthFlowEgress_SetParamUlongValue</func_SetParamUlongValue>
                                         </functions>
                                         <parameters>
                                             <parameter>
                                                 <name>Tagged</name>
                                                 <type>string: Untagged(0),Single(1),Double(2)</type>
                                                 <syntax>uint32/mapped</syntax>
+                                                <writable>true</writable>
                                             </parameter>
                                         </parameters>
                                         <objects>
@@ -761,12 +710,14 @@
                                                 <objectType>object</objectType>
                                                 <functions>
                                                     <func_GetParamUlongValue>GponVeipEthFlowEgressQlan_GetParamUlongValue</func_GetParamUlongValue>
+                                                    <func_SetParamUlongValue>GponVeipEthFlowEgressQlan_SetParamUlongValue</func_SetParamUlongValue>
                                                 </functions>
                                                 <parameters>
                                                     <parameter>
                                                         <name>Vid</name>
                                                         <type>unsignedInt</type>
                                                         <syntax>uint32</syntax>
+                                                        <writable>true</writable>
                                                     </parameter>
                                                     <parameter>
                                                         <name>Pcp</name>

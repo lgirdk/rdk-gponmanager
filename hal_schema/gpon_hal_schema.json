@@ -174,7 +174,6 @@
     "setParameterOptionalList": {
       "description": "Optional data model parameter list for setParameters action",
       "anyOf": [
-          { "$ref": "#/definitions/ontVeipEthernetFlowEgressQVlanVid" }
       ]
     },
 
@@ -1678,7 +1677,7 @@
     },
 
     "ontGemEthernetFlowIngressCVlanVid": {
-      "description": "VLAN ID (Access = Read-Write)",
+      "description": "VLAN ID (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -1698,7 +1697,7 @@
     },
 
     "ontGemEthernetFlowIngressCVlanPcp": {
-      "description": "Priority Code Point (Access = Read-Write)",
+      "description": "Priority Code Point (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -1718,7 +1717,7 @@
     },
 
     "ontGemEthernetFlowIngressCVlanDei": {
-      "description": "Drop Eligible Indicator (Access = Read-Write)",
+      "description": "Drop Eligible Indicator (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -2145,7 +2144,7 @@
     },
 
     "ontVeipInterDomainName": {
-      "description": "This attribute is a character string that provides an optional way to identify the VEIP to a non-OMCI management domain,and expose the default provider brigde configuration. (Access = Read-Only)",
+      "description": "This attribute is a character string that provides an optional way to identify the VEIP to a non-OMCI management domain, and expose the default provider brigde configuration. (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -2567,4 +2566,5 @@
     }
 
   ]
+
 }

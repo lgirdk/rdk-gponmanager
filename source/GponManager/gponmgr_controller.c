@@ -21,6 +21,9 @@
 #include "gponmgr_link_state_machine.h"
 #include "gponmgr_dml_hal.h"
 
+
+
+
 ANSC_STATUS GponMgr_subscribe_hal_events(void)
 {
     ANSC_STATUS ret = ANSC_STATUS_FAILURE;
@@ -38,9 +41,9 @@ ANSC_STATUS GponMgr_subscribe_hal_events(void)
             {
                 DML_PHY_MEDIA* pGponPhy = &(pGponData->dml);
 
-                sprintf(strName, GPON_HAL_PM_LINKSTATUS, pGponPhy->uInstanceNumber);
+                sprintf(strName, GPON_HAL_PM_STATUS, pGponPhy->uInstanceNumber);
 
-                ret = GponHal_Event_Subscribe(&eventcb_PhysicalMediaLinkStatus, strName, JSON_SUBSCRIBE_ON_CHANGE);
+                ret = GponHal_Event_Subscribe(&eventcb_PhysicalMediaStatus, strName, JSON_SUBSCRIBE_ON_CHANGE);
                 if(ret != ANSC_STATUS_SUCCESS) break;
 
                 sprintf(strName, GPON_HAL_PM_ALARM, pGponPhy->uInstanceNumber);
@@ -62,6 +65,15 @@ ANSC_STATUS GponMgr_subscribe_hal_events(void)
                 ret = GponHal_Event_Subscribe(&eventcb_VeipOperationalState, strName, JSON_SUBSCRIBE_ON_CHANGE);
                 if(ret != ANSC_STATUS_SUCCESS) break;
             }
+        }
+
+        //Ploam
+        if( ret == ANSC_STATUS_SUCCESS)
+        {
+
+            sprintf(strName, GPON_HAL_PLOAM_REG_STATE);
+            ret = GponHal_Event_Subscribe(&eventcb_PloamRegistrationState, strName, JSON_SUBSCRIBE_ON_CHANGE);
+
         }
 
 
@@ -96,7 +108,6 @@ ANSC_STATUS GponMgr_Controller_Init()
         return returnStatus;
     }
 
-    //send configuration - Including "Physical Media Enable"
     returnStatus = GponMgr_send_hal_configuration();
     if(returnStatus != ANSC_STATUS_SUCCESS)
     {

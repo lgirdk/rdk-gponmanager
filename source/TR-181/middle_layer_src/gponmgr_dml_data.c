@@ -159,8 +159,7 @@ void GponMgrDml_SetDefaultPhyMedia(DML_PHY_MEDIA_CTRL_T* gponPhyMediaData)
         gponPhyMedia->Connector = LC;
         gponPhyMedia->NominalBitRateDownstream = 0;
         gponPhyMedia->NominalBitRateUpstream = 0;
-        gponPhyMedia->Enable = false;
-        gponPhyMedia->LinkStatus = Disabled;
+        gponPhyMedia->Status = NotPresent;
         gponPhyMedia->RedundancyState = Active;
         
         gponPhyMedia->PerformThreshold.SignalFail = 0;
@@ -175,15 +174,10 @@ void GponMgrDml_SetDefaultPhyMedia(DML_PHY_MEDIA_CTRL_T* gponPhyMediaData)
         gponPhyMedia->TxPower.SignalLevelUpperThreshold = 0;
         
         gponPhyMedia->Voltage.VoltageLevel = 0;
-        gponPhyMedia->Voltage.VoltageLevelLowerThreshold = 0;
-        gponPhyMedia->Voltage.VoltageLevelUpperThreshold = 0;
         
         gponPhyMedia->Bias.CurrentBias = 0;
-        gponPhyMedia->Bias.HighBias = 0;
         
         gponPhyMedia->Temperature.CurrentTemp = 0;
-        gponPhyMedia->Temperature.MaxTemp = 0;
-        gponPhyMedia->Temperature.MinTemp = 0;
         
         gponPhyMedia->Alarm.RDI = INACTIVE;
         gponPhyMedia->Alarm.PEE = INACTIVE;
@@ -198,7 +192,6 @@ void GponMgrDml_SetDefaultPhyMedia(DML_PHY_MEDIA_CTRL_T* gponPhyMediaData)
         gponPhyMedia->Alarm.SD = INACTIVE;
         gponPhyMedia->Alarm.LCDG = INACTIVE;
         gponPhyMedia->Alarm.TF = INACTIVE;
-        gponPhyMedia->Alarm.LODS = INACTIVE;
         gponPhyMedia->Alarm.ROGUE = INACTIVE;        
     }    
 }
@@ -294,7 +287,7 @@ void GponMgrDml_SetDefaultVeip(DML_VEIP_CTRL_T* gponVeipData)
         gponVeip->MeId = 0;
         gponVeip->AdministrativeState = Lock;
         gponVeip->OperationalState = veip_Unknown;
-        memset(gponVeip->InterDomainName, 0, 256);
+        memset(gponVeip->InterDomainName, 0, 25);
         memset(gponVeip->InterfaceName, 0, 256);
         
         gponVeip->EthernetFlow.Ingress.Tagged = veip_Untagged;

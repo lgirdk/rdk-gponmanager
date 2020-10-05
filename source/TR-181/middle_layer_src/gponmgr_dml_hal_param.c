@@ -73,11 +73,6 @@ ANSC_STATUS Map_hal_dml_alarm(DML_ALARM* pGponAlarm, char* ParamName, char* pVal
         pGponAlarm->LOS = strstr(pValue, "Active")?ACTIVE:INACTIVE;
         retStatus = ANSC_STATUS_SUCCESS;
     }
-    else if (strstr(ParamName, "LODS"))
-    {
-        pGponAlarm->LODS = strstr(pValue, "Active")?ACTIVE:INACTIVE;
-        retStatus = ANSC_STATUS_SUCCESS;
-    }
     else if (strstr(ParamName, "LOF"))
     {
         pGponAlarm->LOF = strstr(pValue, "Active")?ACTIVE:INACTIVE;
@@ -268,44 +263,44 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
         pPhyMedia->NominalBitRateUpstream = strtoul(pValue,&err,10);
         retStatus = ANSC_STATUS_SUCCESS;
     }
-    else if( strstr(ParamName, "LinkStatus"))
+    else if( strstr(ParamName, "Status"))
     {
-        //Up(0),Initializing(1),EstablishingLink(2),NoSignal(3),Disabled(4),Error(5)
+        //Up(0),Down(1),Unknown(2),Dormant(3),NotPresent(4),LowerLayerDown(5),Error(6)
         if(strstr(pValue,"Up"))
         {
-            pPhyMedia->LinkStatus = Up;
+            pPhyMedia->Status = Up;
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if(strstr(pValue,"Initializing"))
+        else if(strstr(pValue,"Down"))
         {
-            pPhyMedia->LinkStatus = Initializing;
+            pPhyMedia->Status = Down;
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if (strstr(pValue,"EstablishingLink"))
+        else if (strstr(pValue,"Unknown"))
         {
-            pPhyMedia->LinkStatus = EstablishingLink;
+            pPhyMedia->Status = Unknown;
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if (strstr(pValue,"NoSignal"))
+        else if (strstr(pValue,"Dormant"))
         {
-            pPhyMedia->LinkStatus = NoSignal;
+            pPhyMedia->Status = Dormant;
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if (strstr(pValue,"Disabled"))
+        else if (strstr(pValue,"NotPresent"))
         {
-            pPhyMedia->LinkStatus = Disabled;
+            pPhyMedia->Status = NotPresent;
+            retStatus = ANSC_STATUS_SUCCESS;
+        }
+        else if (strstr(pValue,"LowerLayerDown"))
+        {
+            pPhyMedia->Status = LowerLayerDown;
             retStatus = ANSC_STATUS_SUCCESS;
         }
         else if (strstr(pValue,"Error"))
         {
-            pPhyMedia->LinkStatus = Error;
+            pPhyMedia->Status = Error;
             retStatus = ANSC_STATUS_SUCCESS;;
         }
-    }
-    else if( strstr(ParamName, "Enable"))
-    {
-        pPhyMedia->Enable = strstr(pValue,"1")?TRUE:FALSE;
-        retStatus = ANSC_STATUS_SUCCESS;
     }
 
     /* RxPower */
@@ -357,16 +352,6 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
             pPhyMedia->Voltage.VoltageLevel  = strtol(pValue,&err,10);
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if( strstr(ParamName, "LowerThreshold"))
-        {
-            pPhyMedia->Voltage.VoltageLevelLowerThreshold  = strtol(pValue,&err,10);
-            retStatus = ANSC_STATUS_SUCCESS;
-        }
-        else if( strstr(ParamName, "UpperThreshold"))
-        {
-            pPhyMedia->Voltage.VoltageLevelUpperThreshold  = strtol(pValue,&err,10);
-            retStatus = ANSC_STATUS_SUCCESS;
-        }
     }
 
     /* Bias */
@@ -377,11 +362,6 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
             pPhyMedia->Bias.CurrentBias  = strtoul(pValue,&err,10);
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if( strstr(ParamName, "HighBias"))
-        {
-            pPhyMedia->Bias.HighBias  = strtoul(pValue,&err,10);
-            retStatus = ANSC_STATUS_SUCCESS;
-        }
     }
 
     /* Temperature */
@@ -390,16 +370,6 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
         if( strstr(ParamName, "CurrentTemp"))
         {
             pPhyMedia->Temperature.CurrentTemp = strtol(pValue,&err,10);
-            retStatus = ANSC_STATUS_SUCCESS;
-        }
-        else if( strstr(ParamName, "MaxTemp"))
-        {
-            pPhyMedia->Temperature.MaxTemp  = strtol(pValue,&err,10);
-            retStatus = ANSC_STATUS_SUCCESS;
-        }
-        else if( strstr(ParamName, "MinTemp"))
-        {
-            pPhyMedia->Temperature.MinTemp  = strtol(pValue,&err,10);
             retStatus = ANSC_STATUS_SUCCESS;
         }
     }
@@ -789,6 +759,77 @@ ANSC_STATUS Map_hal_dml_gem(DML_GEM_LIST_T* gponGemList,char* ParamName, char* p
     return retStatus;
 }
 
+void parseStrInput_InterDomainName( DML_VEIP* pVeip, char *pValue)
+{
+    char strInterDomainName[MAX_STR_LEN] = {0};
+    char *token, *err;
+    
+    if(pValue == NULL || pVeip == NULL)
+    {
+        fprintf(stderr, "Invalide Input\n");
+    }
+
+    strncpy(strInterDomainName, pValue, MAX_STR_LEN);
+
+   /* get InterDomainName from Hal */
+   token = strtok(strInterDomainName, "#");
+
+   if( token != NULL )
+   {
+      strcpy(pVeip->InterDomainName, token );
+   }
+
+   /* get gress value from Hal */
+   if( token != NULL )
+   {
+
+       /* parse gress Example Tagged-Vid-Pcp-Dei */
+       token = strtok(NULL, "-");
+
+       if (token != NULL)
+       {
+           if (strstr(token,IEEE_802_1Q_ETHERTYPE_STR_SINGLE))
+           {
+               pVeip->EthernetFlow.Ingress.Tagged = veip_Single;
+               pVeip->EthernetFlow.Egress.Tagged  = veip_Single;
+           }
+           else if (strstr(token,IEEE_802_1Q_ETHERTYPE_STR_DOUBLE))
+           {
+               pVeip->EthernetFlow.Ingress.Tagged = veip_Double;
+               pVeip->EthernetFlow.Egress.Tagged  = veip_Double;
+           }
+           else if (strstr(token,IEEE_802_1Q_ETHERTYPE_STR_UNTAGGED))
+           {
+               pVeip->EthernetFlow.Ingress.Tagged = veip_Untagged;
+               pVeip->EthernetFlow.Egress.Tagged  = veip_Untagged;
+           }
+       }
+
+       token = strtok(NULL, "-");
+
+       if (token != NULL)
+       {
+           pVeip->EthernetFlow.Ingress.QVLAN.Vid = strtoul(token,&err,10);
+           pVeip->EthernetFlow.Egress.QVLAN.Vid  = strtoul(token,&err,10);
+       }
+
+       token = strtok(NULL, "-");
+
+       if (token != NULL)
+       {
+           pVeip->EthernetFlow.Ingress.QVLAN.Pcp = strtoul(token,&err,10);
+           pVeip->EthernetFlow.Egress.QVLAN.Pcp  = strtoul(token,&err,10);
+       }
+
+       token = strtok(NULL, "-");
+
+       if (token != NULL)
+       {
+           pVeip->EthernetFlow.Ingress.QVLAN.Dei = strtoul(token,&err,10);
+           pVeip->EthernetFlow.Egress.QVLAN.Dei  = strtoul(token,&err,10);
+       }
+   }
+}
 
 ANSC_STATUS Map_hal_dml_veip(DML_VEIP_LIST_T* gponVeipList, char* ParamName, char* pValue)
 {
@@ -878,94 +919,13 @@ ANSC_STATUS Map_hal_dml_veip(DML_VEIP_LIST_T* gponVeipList, char* ParamName, cha
     }
     else if (strstr(ParamName, "InterDomainName"))
     {
-        strncpy(pVeip->InterDomainName,pValue,strlen(pValue)+1);
+        parseStrInput_InterDomainName(pVeip, pValue);
         retStatus = ANSC_STATUS_SUCCESS;
     }
     else if (strstr(ParamName, "InterfaceName"))
     {
         strncpy(pVeip->InterfaceName,pValue,strlen(pValue)+1);
         retStatus = ANSC_STATUS_SUCCESS;
-    }
-    else if (strstr(ParamName, "EthernetFlow"))
-    {
-        if (strstr(ParamName, "Ingress"))
-        {
-            if (strstr(ParamName, "Tagged"))
-            {
-                if (strstr(pValue,"Single"))
-                {
-                    pVeip->EthernetFlow.Ingress.Tagged = veip_Single;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(pValue,"Double"))
-                {
-                    pVeip->EthernetFlow.Ingress.Tagged = veip_Double;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(pValue,"Untagged"))
-                {
-                    pVeip->EthernetFlow.Ingress.Tagged = veip_Untagged;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-            }
-            else if (strstr(ParamName, "Q-VLAN"))
-            {
-                if (strstr(ParamName, "Vid"))
-                {
-                    pVeip->EthernetFlow.Ingress.QVLAN.Vid = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(ParamName, "Pcp"))
-                {
-                    pVeip->EthernetFlow.Ingress.QVLAN.Pcp = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(ParamName, "Dei"))
-                {
-                    pVeip->EthernetFlow.Ingress.QVLAN.Dei = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-            }
-        }
-        if (strstr(ParamName, "Egress"))
-        {
-            if (strstr(ParamName, "Tagged"))
-            {
-                if (strstr(pValue,"Single"))
-                {
-                    pVeip->EthernetFlow.Egress.Tagged = veip_Single;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(pValue,"Double"))
-                {
-                    pVeip->EthernetFlow.Egress.Tagged = veip_Double;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(pValue,"Untagged"))
-                {
-                    pVeip->EthernetFlow.Egress.Tagged = veip_Untagged;
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-            }
-            else if (strstr(ParamName, "Q-VLAN"))
-            {
-                if (strstr(ParamName, "Vid"))
-                {
-                    pVeip->EthernetFlow.Egress.QVLAN.Vid = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(ParamName, "Pcp"))
-                {
-                    pVeip->EthernetFlow.Egress.QVLAN.Pcp = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-                else if (strstr(ParamName, "Dei"))
-                {
-                    pVeip->EthernetFlow.Egress.QVLAN.Dei = strtoul(pValue,&err,10);
-                    retStatus = ANSC_STATUS_SUCCESS;
-                }
-            }
-        }
     }
     
     if(retStatus == ANSC_STATUS_SUCCESS)

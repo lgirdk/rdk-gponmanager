@@ -58,8 +58,6 @@ typedef struct
 _DML_VOLT
 {
     INT     VoltageLevel;
-    INT     VoltageLevelLowerThreshold;
-    INT     VoltageLevelUpperThreshold;
 }
 DML_VOLT, *PDML_VOLT;
 
@@ -67,7 +65,6 @@ typedef struct
 _DML_BIAS
 {
     UINT    CurrentBias;
-    UINT    HighBias;
 }
 DML_BIAS, *PDML_BIAS;
 
@@ -75,8 +72,6 @@ typedef struct
 _DML_TEMPERATURE
 {
     INT    CurrentTemp;
-    INT    MaxTemp;
-    INT    MinTemp;
 }
 DML_TEMPERATURE, *PDML_TEMPERATURE;
 
@@ -103,7 +98,6 @@ _DML_ALARM
     ALARM_ENUM     SD;
     ALARM_ENUM     LCDG;
     ALARM_ENUM     TF;
-    ALARM_ENUM     LODS;
     ALARM_ENUM     ROGUE;
 }
 DML_ALARM, *PDML_ALARM;
@@ -169,16 +163,17 @@ _DML_LOCK_ENUM
 DML_LOCK_ENUM;
 
 typedef enum
-_DML_LINKSTATUS_ENUM
+_DML_PHYMEDIASTATUS_ENUM
 {
     Up,
-    Initializing,
-    EstablishingLink,
-    NoSignal,
-    Disabled,
+    Down,
+    Unknown,
+    Dormant,
+    NotPresent,
+    LowerLayerDown,
     Error
 }
-DML_LINKSTATUS_ENUM;
+DML_PHYMEDIASTATUS_ENUM;
 
 typedef enum
 _DML_REDUNDANCYSTATE_ENUM
@@ -214,8 +209,7 @@ _DML_PHY_MEDIA
     DML_CONNECTOR_ENUM          Connector;
     UINT                        NominalBitRateDownstream;
     UINT                        NominalBitRateUpstream;
-    BOOLEAN                     Enable;
-    DML_LINKSTATUS_ENUM         LinkStatus;
+    DML_PHYMEDIASTATUS_ENUM     Status;
     DML_REDUNDANCYSTATE_ENUM    RedundancyState;
     DML_PERFORM                 PerformThreshold;
     DML_POWER                   RxPower;
@@ -362,7 +356,7 @@ _DML_VEIP
     ULONG              MeId;
     DML_LOCK_ENUM      AdministrativeState;
     DML_OPERSTATE_ENUM OperationalState;
-    CHAR               InterDomainName[256];
+    CHAR               InterDomainName[25];
     CHAR               InterfaceName[256];
     DML_VEIP_ETHFLOW   EthernetFlow;
 }

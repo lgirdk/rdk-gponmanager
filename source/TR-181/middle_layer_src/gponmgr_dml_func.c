@@ -311,81 +311,15 @@ BOOL GponPhy_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* 
                 *puLong = (ULONG) pGponPhy->NominalBitRateUpstream;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "LinkStatus", TRUE))
+            else if( AnscEqualString(ParamName, "Status", TRUE))
             {
-                *puLong = (ULONG) pGponPhy->LinkStatus;
+                *puLong = (ULONG) pGponPhy->Status;
                 ret = TRUE;
             }
             else if( AnscEqualString(ParamName, "RedundancyState", TRUE))
             {
                 *puLong = (ULONG) pGponPhy->RedundancyState;
                 ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL* pBool)
-{
-    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
-    BOOL ret = FALSE;
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
-
-            if( AnscEqualString(ParamName, "Enable", TRUE))
-            {
-                *pBool = pGponPhy->Enable;
-                ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bValue)
-{
-    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
-    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
-    char strName[JSON_MAX_STR_ARR_SIZE]={0};
-    BOOL ret = FALSE;
-
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
-
-            if( AnscEqualString(ParamName, "Enable", TRUE))
-            {
-                if (bValue==TRUE)
-                {
-                    strncpy(strValue,JSON_STR_TRUE,strlen(JSON_STR_TRUE)+1);
-                }
-                else
-                {
-                    strncpy(strValue,JSON_STR_FALSE,strlen(JSON_STR_FALSE)+1);
-                }
-
-                sprintf(strName, GPON_HAL_PM_ENABLE, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_BOOLEAN, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Enable = bValue;
-                    ret = TRUE;
-                }
             }
 
             GponMgrDml_GetData_release(pGponDmlData);
@@ -564,58 +498,7 @@ BOOL GponPhyVoltage_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int
                 *pInt = (int) pGponPhy->Voltage.VoltageLevel;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "LowerThreshold", TRUE))
-            {
-                *pInt = (int) pGponPhy->Voltage.VoltageLevelLowerThreshold;
-                ret = TRUE;
-            }
-            else if( AnscEqualString(ParamName, "UpperThreshold", TRUE))
-            {
-                *pInt = (int) pGponPhy->Voltage.VoltageLevelUpperThreshold;
-                ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponPhyVoltage_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue)
-{
-    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
-    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
-    char strName[JSON_MAX_STR_ARR_SIZE]={0};
-    BOOL ret = FALSE;
-
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
-
-            if( AnscEqualString(ParamName, "LowerThreshold", TRUE))
-            {
-                sprintf(strName, GPON_HAL_PM_VOLTAGE_LOWER_THR, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Voltage.VoltageLevelLowerThreshold=iValue;
-                    ret = TRUE;
-                }
-            }
-            else if( AnscEqualString(ParamName, "UpperThreshold", TRUE))
-            {
-                sprintf(strName, GPON_HAL_PM_VOLTAGE_UPPER_THR, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Voltage.VoltageLevelUpperThreshold=iValue;
-                    ret = TRUE;
-                }
-            }
-
+            
             GponMgrDml_GetData_release(pGponDmlData);
         }
     }
@@ -639,43 +522,6 @@ BOOL GponPhyBias_GetParamUlongValue( ANSC_HANDLE hInsContext,char* ParamName,ULO
             {
                 *puLong = pGponPhy->Bias.CurrentBias;
                 ret = TRUE;
-            }
-            else if( AnscEqualString(ParamName, "HighBias", TRUE))
-            {
-                *puLong = pGponPhy->Bias.HighBias;
-                ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponPhyBias_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue)
-{
-    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
-    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
-    char strName[JSON_MAX_STR_ARR_SIZE]={0};
-    BOOL ret = FALSE;
-
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
-
-            if( AnscEqualString(ParamName, "HighBias", TRUE))
-            {
-                sprintf(strName, GPON_HAL_PM_BIAS_HIGH, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Bias.HighBias=iValue;
-                    ret = TRUE;
-                }
             }
 
             GponMgrDml_GetData_release(pGponDmlData);
@@ -701,57 +547,6 @@ BOOL GponPhyTemperature_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName
             {
                 *pInt = (int) pGponPhy->Temperature.CurrentTemp;
                 ret = TRUE;
-            }
-            else if( AnscEqualString(ParamName, "MaxTemp", TRUE))
-            {
-                *pInt = (int) pGponPhy->Temperature.MaxTemp;
-                ret = TRUE;
-            }
-            else if( AnscEqualString(ParamName, "MinTemp", TRUE))
-            {
-                *pInt = (int) pGponPhy->Temperature.MinTemp;
-                ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponPhyTemperature_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue)
-{
-    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
-    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
-    char strName[JSON_MAX_STR_ARR_SIZE]={0};
-    BOOL ret = FALSE;
-
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
-
-            if( AnscEqualString(ParamName, "MaxTemp", TRUE))
-            {
-                sprintf(strName, GPON_HAL_PM_TEMPERATURE_MAX, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Temperature.MaxTemp=iValue;
-                    ret = TRUE;
-                }
-            }
-            else if( AnscEqualString(ParamName, "MinTemp", TRUE))
-            {
-                sprintf(strName, GPON_HAL_PM_TEMPERATURE_MIN, pGponPhy->uInstanceNumber);
-                if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponPhy->Temperature.MinTemp=iValue;
-                    ret = TRUE;
-                }
             }
 
             GponMgrDml_GetData_release(pGponDmlData);
@@ -866,11 +661,6 @@ BOOL GponPhyAlarm_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULO
             else if( AnscEqualString(ParamName, "TF", TRUE))
             {
                 *puLong = pGponPhyAlarm->TF;
-                ret = TRUE;
-            }
-            else if( AnscEqualString(ParamName, "LODS", TRUE))
-            {
-                *puLong = pGponPhyAlarm->LODS;
                 ret = TRUE;
             }
             else if( AnscEqualString(ParamName, "ROGUE", TRUE))
@@ -1253,58 +1043,6 @@ BOOL GponGemEthFlowIngressCvlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char*
             {
                 *puLong= pGponGem->EthernetFlow.Ingress.CVLAN.Dei;
                 ret = TRUE;
-            }
-
-            GponMgrDml_GetData_release(pGponDmlData);
-        }
-    }
-
-    return ret;
-}
-
-BOOL GponGemEthFlowIngressCvlan_SetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG uValue)
-{
-    DML_GEM_CTRL_T* pGponCtrl = (DML_GEM_CTRL_T*) hInsContext;
-    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
-    char strName[JSON_MAX_STR_ARR_SIZE]={0};
-    BOOL ret = FALSE;
-
-
-    if(pGponCtrl != NULL)
-    {
-        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-        if(pGponDmlData != NULL)
-        {
-            DML_GEM* pGponGem = &(pGponCtrl->dml);
-
-            snprintf(strValue,JSON_MAX_VAL_ARR_SIZE,"%ld",uValue);
-
-            if( AnscEqualString(ParamName, "Vid", TRUE))
-            {
-                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_GEM_ETH_INGRESS_CVLAN_VID,pGponGem->uInstanceNumber);
-                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponGem->EthernetFlow.Ingress.CVLAN.Vid = uValue;
-                    ret = TRUE;
-                }
-            }
-            else if( AnscEqualString(ParamName, "Pcp", TRUE))
-            {
-                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_GEM_ETH_INGRESS_CVLAN_PCP,pGponGem->uInstanceNumber);
-                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponGem->EthernetFlow.Ingress.CVLAN.Pcp = uValue;
-                    ret = TRUE;
-                }
-            }
-            else if( AnscEqualString(ParamName, "Dei", TRUE))
-            {
-                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_GEM_ETH_INGRESS_CVLAN_DEI,pGponGem->uInstanceNumber);
-                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponGem->EthernetFlow.Ingress.CVLAN.Dei = uValue;
-                    ret = TRUE;
-                }
             }
 
             GponMgrDml_GetData_release(pGponDmlData);
@@ -1730,25 +1468,6 @@ BOOL GponVeipEthFlowIngressQlan_SetParamUlongValue(ANSC_HANDLE hInsContext, char
                     ret = TRUE;
                 }
             }
-            else if( AnscEqualString(ParamName, "Pcp", TRUE))
-            {
-                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_VEIP_ETH_INGRESS_QVLAN_PCP,pGponVeip->uInstanceNumber);
-                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponVeip->EthernetFlow.Ingress.QVLAN.Pcp = uValue;
-                    ret = TRUE;
-                }
-            }
-            else if( AnscEqualString(ParamName, "Dei", TRUE))
-            {
-                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_VEIP_ETH_INGRESS_QVLAN_DEI,pGponVeip->uInstanceNumber);
-                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
-                {
-                    pGponVeip->EthernetFlow.Ingress.QVLAN.Dei = uValue;
-                    ret = TRUE;
-                }
-            }
-
             GponMgrDml_GetData_release(pGponDmlData);
         }
     }
@@ -1780,6 +1499,43 @@ BOOL GponVeipEthFlowEgress_GetParamUlongValue(ANSC_HANDLE hInsContext,char* Para
 
     return ret;
 }
+
+BOOL GponVeipEthFlowEgress_SetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG uValue)
+{
+    DML_VEIP_CTRL_T* pGponCtrl = (DML_VEIP_CTRL_T*) hInsContext;
+    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
+    char strName[JSON_MAX_STR_ARR_SIZE]={0};
+    char taggedValue[3][16]={"Untagged","Single","Double"};
+    BOOL ret = FALSE;
+
+
+    if(pGponCtrl != NULL)
+    {
+        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+        if(pGponDmlData != NULL)
+        {
+            DML_VEIP* pGponVeip = &(pGponCtrl->dml);
+
+            snprintf(strValue,JSON_MAX_VAL_ARR_SIZE,"%ld",taggedValue[uValue]);
+
+            /* check the parameter name and return the corresponding value */
+            if( AnscEqualString(ParamName, "Tagged", TRUE))
+            {
+                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_VEIP_ETH_EGRESS_TAGGED,pGponVeip->uInstanceNumber);
+                if (GponHal_setParam(strName, PARAM_STRING, strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    pGponVeip->EthernetFlow.Ingress.Tagged = uValue;
+                    ret = TRUE;
+                }
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
 
 BOOL GponVeipEthFlowEgressQlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong)
 {
@@ -1816,6 +1572,39 @@ BOOL GponVeipEthFlowEgressQlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char* 
     return ret;
 }
 
+BOOL GponVeipEthFlowEgressQlan_SetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName,ULONG uValue)
+{
+    DML_VEIP_CTRL_T* pGponCtrl = (DML_VEIP_CTRL_T*) hInsContext;
+    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
+    char strName[JSON_MAX_STR_ARR_SIZE]={0};
+    BOOL ret = FALSE;
+
+
+    if(pGponCtrl != NULL)
+    {
+        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+        if(pGponDmlData != NULL)
+        {
+            DML_VEIP* pGponVeip = &(pGponCtrl->dml);
+
+            snprintf(strValue,JSON_MAX_VAL_ARR_SIZE,"%ld",uValue);
+
+            /* check the parameter name and return the corresponding value */
+            if( AnscEqualString(ParamName, "Vid", TRUE))
+            {
+                snprintf(strName,JSON_MAX_STR_ARR_SIZE,GPON_HAL_VEIP_ETH_EGRESS_QVLAN_VID,pGponVeip->uInstanceNumber);
+                if (GponHal_setParam(strName,PARAM_UNSIGNED_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    pGponVeip->EthernetFlow.Egress.QVLAN.Vid = uValue;
+                    ret = TRUE;
+                }
+            }
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
 
 ULONG Gpontr69_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* pValue,ULONG* pUlSize)
 {

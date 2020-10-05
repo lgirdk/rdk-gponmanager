@@ -340,19 +340,14 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
 
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhy_GetParamStringValue", GponPhy_GetParamStringValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhy_GetParamUlongValue", GponPhy_GetParamUlongValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhy_GetParamBoolValue", GponPhy_GetParamBoolValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhy_SetParamBoolValue", GponPhy_SetParamBoolValue);
 
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyRxpwr_GetParamIntValue", GponPhyRxpwr_GetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyRxpwr_SetParamIntValue", GponPhyRxpwr_SetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyTxpwr_GetParamIntValue", GponPhyTxpwr_GetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyTxpwr_SetParamIntValue", GponPhyTxpwr_SetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyVoltage_GetParamIntValue", GponPhyVoltage_GetParamIntValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyVoltage_SetParamIntValue", GponPhyVoltage_SetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyBias_GetParamUlongValue", GponPhyBias_GetParamUlongValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyBias_SetParamIntValue", GponPhyBias_SetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyTemperature_GetParamIntValue", GponPhyTemperature_GetParamIntValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyTemperature_SetParamIntValue", GponPhyTemperature_SetParamIntValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyPerformanceThreshold_GetParamUlongValue", GponPhyPerformanceThreshold_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponPhyAlarm_GetParamUlongValue", GponPhyAlarm_GetParamUlongValue);
 
@@ -370,7 +365,6 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowIngress_GetParamUlongValue", GponGemEthFlowIngress_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowIngressSvlan_GetParamUlongValue", GponGemEthFlowIngressSvlan_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowIngressCvlan_GetParamUlongValue", GponGemEthFlowIngressCvlan_GetParamUlongValue);
-    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowIngressCvlan_SetParamUlongValue", GponGemEthFlowIngressCvlan_SetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowEgress_GetParamUlongValue", GponGemEthFlowEgress_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowEgressSvlan_GetParamUlongValue", GponGemEthFlowEgressSvlan_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponGemEthFlowEgressCvlan_GetParamUlongValue", GponGemEthFlowEgressCvlan_GetParamUlongValue);
@@ -392,7 +386,9 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowIngressQlan_GetParamUlongValue", GponVeipEthFlowIngressQlan_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowIngressQlan_SetParamUlongValue", GponVeipEthFlowIngressQlan_SetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowEgress_GetParamUlongValue", GponVeipEthFlowEgress_GetParamUlongValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowEgress_SetParamUlongValue", GponVeipEthFlowEgress_SetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowEgressQlan_GetParamUlongValue", GponVeipEthFlowEgressQlan_GetParamUlongValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeipEthFlowEgressQlan_SetParamUlongValue", GponVeipEthFlowEgressQlan_SetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeip_Commit", GponVeip_Commit);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeip_Validate", GponVeip_Validate);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "GponVeip_Rollback", GponVeip_Rollback);

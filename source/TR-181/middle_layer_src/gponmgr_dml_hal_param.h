@@ -28,7 +28,12 @@
 #include "gpon_apis.h"
 #include "gponmgr_dml_obj.h"
 
+#define MAX_STR_LEN 256
 
+//Tagged specific information
+#define IEEE_802_1Q_ETHERTYPE_STR_SINGLE   "Single"
+#define IEEE_802_1Q_ETHERTYPE_STR_DOUBLE   "Double"
+#define IEEE_802_1Q_ETHERTYPE_STR_UNTAGGED "Untagged"
 
 ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, char* pValue);
 ANSC_STATUS Map_hal_dml_gtc(DML_GTC* gponGtc,char* ParamName, char* pValue);

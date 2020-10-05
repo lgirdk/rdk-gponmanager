@@ -47,11 +47,7 @@ GponPhyRxpwr_SetParamIntValue
 GponPhyTxpwr_GetParamIntValue
 GponPhyTxpwr_SetParamIntValue
 GponPhyVoltage_GetParamIntValue
-GponPhyVoltage_SetParamIntValue
-GponPhyBias_GetParamIntValue
-GponPhyBias_SetParamIntValue
 GponPhyTemperature_GetParamIntValue
-GponPhyTemperature_SetParamIntValue
 GponPhyPerformanceThreshold_GetParamUlongValue
 
 GponGtc_GetParamUlongValue
@@ -76,6 +72,7 @@ GponVeip_GetParamUlongValue
 GponVeipEthFlowIngress_GetParamUlongValue
 GponVeipEthFlowIngressQlan_GetParamUlongValue
 GponVeipEthFlowEgress_GetParamUlongValue
+GponVeipEthFlowEgress_SetParamUlongValue
 GponVeipEthFlowEgressQlan_GetParamUlongValue
 ***********************************************************************/
 
@@ -109,10 +106,6 @@ ULONG GponPhy_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* 
 
 BOOL GponPhy_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
-BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL*   pBool);
-
-BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bValue);
-
 BOOL GponPhyRxpwr_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
 
 BOOL GponPhyRxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue);
@@ -123,17 +116,9 @@ BOOL GponPhyTxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int i
 
 BOOL GponPhyVoltage_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
 
-BOOL GponPhyVoltage_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue);
-
 BOOL GponPhyBias_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
-BOOL GponPhyBias_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
-
-BOOL GponPhyBias_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue);
-
 BOOL GponPhyTemperature_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
-
-BOOL GponPhyTemperature_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int iValue);
 
 BOOL GponPhyPerformanceThreshold_GetParamUlongValue   (ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
@@ -162,8 +147,6 @@ BOOL GponGemEthFlowIngress_GetParamUlongValue(ANSC_HANDLE hInsContext,char* Para
 BOOL GponGemEthFlowIngressSvlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
 BOOL GponGemEthFlowIngressCvlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
-
-BOOL GponGemEthFlowIngressCvlan_SetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG uValue);
 
 BOOL GponGemEthFlowEgress_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
@@ -203,7 +186,11 @@ BOOL GponVeipEthFlowIngressQlan_SetParamUlongValue(ANSC_HANDLE hInsContext,char*
 
 BOOL GponVeipEthFlowEgress_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
+BOOL GponVeipEthFlowEgress_SetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG uValue);
+
 BOOL GponVeipEthFlowEgressQlan_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
+
+BOOL GponVeipEthFlowEgressQlan_SetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG uValue);
 
 BOOL GponVeip_Validate(ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength);
 
