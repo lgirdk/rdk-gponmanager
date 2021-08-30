@@ -382,6 +382,7 @@ BOOL GponPhyRxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int i
             if( AnscEqualString(ParamName, "SignalLevelLowerThreshold", TRUE))
             {
                 sprintf(strName, GPON_HAL_PM_RX_POWER_LOWER_THR, pGponPhy->uInstanceNumber);
+                snprintf(strValue, JSON_MAX_VAL_ARR_SIZE, "%d", iValue);
                 if (GponHal_setParam(strName,PARAM_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
                 {
                     pGponPhy->RxPower.SignalLevelLowerThreshold=iValue;
@@ -391,6 +392,7 @@ BOOL GponPhyRxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int i
             else if( AnscEqualString(ParamName, "SignalLevelUpperThreshold", TRUE))
             {
                 sprintf(strName, GPON_HAL_PM_RX_POWER_UPPER_THR, pGponPhy->uInstanceNumber);
+                snprintf(strValue, JSON_MAX_VAL_ARR_SIZE, "%d", iValue);
                 if (GponHal_setParam(strName,PARAM_INTEGER,strValue) == ANSC_STATUS_SUCCESS)
                 {
                     pGponPhy->RxPower.SignalLevelUpperThreshold=iValue;
@@ -458,6 +460,7 @@ BOOL GponPhyTxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int i
             if( AnscEqualString(ParamName, "SignalLevelLowerThreshold", TRUE))
             {
                 sprintf(strName, GPON_HAL_PM_TX_POWER_LOWER_THR, pGponPhy->uInstanceNumber);
+                snprintf(strValue, JSON_MAX_VAL_ARR_SIZE, "%d", iValue);
                 if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
                 {
                     pGponPhy->TxPower.SignalLevelLowerThreshold=iValue;
@@ -467,6 +470,7 @@ BOOL GponPhyTxpwr_SetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int i
             else if( AnscEqualString(ParamName, "SignalLevelUpperThreshold", TRUE))
             {
                 sprintf(strName, GPON_HAL_PM_TX_POWER_UPPER_THR, pGponPhy->uInstanceNumber);
+                snprintf(strValue, JSON_MAX_VAL_ARR_SIZE, "%d", iValue);
                 if (GponHal_setParam(strName, PARAM_INTEGER, strValue) == ANSC_STATUS_SUCCESS)
                 {
                     pGponPhy->TxPower.SignalLevelUpperThreshold=iValue;
