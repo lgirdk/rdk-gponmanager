@@ -187,8 +187,8 @@ ANSC_STATUS Gponmgr_eth_addInterface(int iVeipIndex, char *LowerLayers, int *iVe
                 return ANSC_STATUS_FAILURE;
             }
 
-            //get Veip InterDomain Name
-            snprintf(iDomainName, MAX_STR_ARR_SIZE, "%s", pGponVeip->InterDomainName);
+            //get Veip Interface Name
+            snprintf(iDomainName, MAX_STR_ARR_SIZE, "%s", pGponVeip->InterfaceName);
         }
 
         GponMgrDml_GetData_release(pGponDmlData);
