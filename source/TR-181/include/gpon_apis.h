@@ -179,7 +179,7 @@ typedef enum
 _DML_REDUNDANCYSTATE_ENUM
 {
     Active,
-    Standy
+    Standby
 }
 DML_REDUNDANCYSTATE_ENUM;
 
