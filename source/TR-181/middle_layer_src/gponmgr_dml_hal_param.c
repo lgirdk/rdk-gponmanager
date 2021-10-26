@@ -302,6 +302,19 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
             retStatus = ANSC_STATUS_SUCCESS;;
         }
     }
+    else if( strstr(ParamName, "RedundancyState"))
+    {
+        if(strstr(pValue,"Active"))
+        {
+            pPhyMedia->RedundancyState = Active;
+            retStatus = ANSC_STATUS_SUCCESS;
+        }
+        else if(strstr(pValue,"Standby"))
+        {
+            pPhyMedia->RedundancyState = Standby;
+            retStatus = ANSC_STATUS_SUCCESS;
+        }
+    }
 
     /* RxPower */
     else if(strstr(ParamName,"RxPower"))

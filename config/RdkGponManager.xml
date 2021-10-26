@@ -79,7 +79,7 @@
                             </parameter>
                             <parameter>
                                 <name>RedundancyState</name>
-                                <type>string: Active(0),Standy(1)</type>
+                                <type>string: Active(0),Standby(1)</type>
                                 <syntax>uint32/mapped</syntax>
                             </parameter>
                         </parameters>
