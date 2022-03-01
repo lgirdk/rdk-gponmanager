@@ -228,12 +228,6 @@ void sig_handler(int sig)
     {
         signal(SIGALRM, sig_handler); /* reset it to this function */
         CcspTraceWarning(("SIGALRM received!\n"));
-        RDKLogEnable = GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_LoggerEnable");
-        RDKLogLevel = (char)GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_LogLevel");
-//        GPONMANAGER_RDKLogLevel = GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_GPONManager_LogLevel");
-//        GPONMANAGER_RDKLogEnable = (char)GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_GPONManager_LoggerEnable");
-//        CcspTraceWarning(("RDKLogEnable %d, RDKLogLevel %d, GPONMANAGER_RDKLogLevel %d, GPONMANAGER_RDKLogEnable %d\n",
-//                          RDKLogEnable, RDKLogLevel, GPONMANAGER_RDKLogLevel, GPONMANAGER_RDKLogEnable));
     }
     else {
         /* get stack trace first */
@@ -336,15 +330,6 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Cdm_Init: %s\n", Cdm_StrError(err));
         exit(1);
     }
-
-    //Needs to configure initial logger setup
-    RDKLogEnable = GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_LoggerEnable");
-    RDKLogLevel = (char)GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_LogLevel");
-//    GPONMANAGER_RDKLogLevel = GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_GPONManager_LogLevel");
-//    GPONMANAGER_RDKLogEnable = (char)GetLogInfo(bus_handle,"eRT.","Device.LogAgent.X_RDKCENTRAL-COM_GPONManager_LoggerEnable");
-
-//    CcspTraceInfo(("RDKLogEnable %d, RDKLogLevel %d, GPONMANAGER_RDKLogLevel %d, GPONMANAGER_RDKLogEnable %d\n",
-//                          RDKLogEnable, RDKLogLevel, GPONMANAGER_RDKLogLevel, GPONMANAGER_RDKLogEnable));
 
 #ifdef ENABLE_SD_NOTIFY
     sd_notifyf(0, "READY=1\n"
