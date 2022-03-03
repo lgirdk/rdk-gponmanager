@@ -104,6 +104,14 @@ ULONG GponPhy_Rollback(ANSC_HANDLE hInsContext);
 
 ULONG GponPhy_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*   pValue,ULONG*  pUlSize);
 
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
+BOOL GponPhy_SetParamStringValue(ANSC_HANDLE hInsContext, char* ParamName, char* pString);
+
+BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL*   pBool);
+
+BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bValue);
+#endif
+
 BOOL GponPhy_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
 BOOL GponPhyRxpwr_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
@@ -130,7 +138,9 @@ BOOL GponPloam_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG*
 
 ULONG GponPloam_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*   pValue,ULONG*  pUlSize);
 
+#if !defined(WAN_MANAGER_UNIFICATION_ENABLED)
 BOOL GponPloamRegTmr_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
+#endif
 
 BOOL GponGem_IsUpdated(ANSC_HANDLE hInsContext);
 
