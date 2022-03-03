@@ -49,6 +49,12 @@
 
 
 #define GPON_HAL_PM_STATUS                  "Device.X_RDK_ONT.PhysicalMedia.%ld.Status"
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
+#define GPON_HAL_PM_ENABLE                      "Device.X_RDK_ONT.PhysicalMedia.%ld.Enable"
+#define GPON_HAL_PM_ALIAS                   	"Device.X_RDK_ONT.PhysicalMedia.%ld.Alias"
+#define GPON_HAL_PM_LOWERLAYERS             	"Device.X_RDK_ONT.PhysicalMedia.%ld.LowerLayers"
+#define GPON_HAL_PM_UPSTREAM			        "Device.X_RDK_ONT.PhysicalMedia.%ld.Upstream"
+#endif
 #define GPON_HAL_PM_RX_POWER_LOWER_THR          "Device.X_RDK_ONT.PhysicalMedia.%ld.RxPower.SignalLevelLowerThreshold"
 #define GPON_HAL_PM_RX_POWER_UPPER_THR          "Device.X_RDK_ONT.PhysicalMedia.%ld.RxPower.SignalLevelUpperThreshold"
 #define GPON_HAL_PM_TX_POWER_LOWER_THR          "Device.X_RDK_ONT.PhysicalMedia.%ld.TxPower.SignalLevelLowerThreshold"
