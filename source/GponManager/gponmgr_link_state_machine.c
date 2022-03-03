@@ -86,7 +86,6 @@ ANSC_STATUS check_gpon_veip_interface_enabled(GPON_LINK_SM_CTRL_T* gpon_sm_ctrl)
         {
             DML_VEIP* pGponVeip = &(pGponVeipData->dml);
 
-            //check Veip Administrative State
             if(pGponVeip->AdministrativeState == Unlock)
             {
                 return ANSC_STATUS_SUCCESS;
@@ -146,11 +145,16 @@ ANSC_STATUS gpon_config_veip_interface(GPON_LINK_SM_CTRL_T* gpon_sm_ctrl)
             veip_index = gpon_sm_ctrl->veip_hal_index - 1;
             sprintf(gpon_sm_ctrl->veip_lower_layer, GPON_HAL_VEIP_NODE, gpon_sm_ctrl->veip_hal_index);
 
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
+            ret =  CosaDmlGponSetPhyStatusForWanManager(veip_index,gpon_sm_ctrl->veip_lower_layer,INTERFACE_UP);
+#else
             //add GW interface
             ret = Gponmgr_eth_addInterface(veip_index, gpon_sm_ctrl->veip_lower_layer, &(gpon_sm_ctrl->veip_eth_instance));
 
             //Enable GW interface 
             Gponmgr_eth_setEnableInterface(gpon_sm_ctrl->veip_eth_instance, TRUE);
+#endif
+
         }
     }
 
@@ -165,7 +169,12 @@ ANSC_STATUS gpon_disable_veip_interface(GPON_LINK_SM_CTRL_T* gpon_sm_ctrl)
 
     if( gpon_sm_ctrl != NULL )
     {
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
+        int veip_index = gpon_sm_ctrl->veip_hal_index - 1;
+        ret = CosaDmlGponSetPhyStatusForWanManager(veip_index, gpon_sm_ctrl->veip_lower_layer, INTERFACE_DOWN);
+#else
         ret = Gponmgr_eth_setEnableInterface(gpon_sm_ctrl->veip_eth_instance, FALSE);
+#endif
     }
 
     return ret;

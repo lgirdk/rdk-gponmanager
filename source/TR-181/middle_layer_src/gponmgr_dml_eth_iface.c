@@ -69,6 +69,7 @@ static ANSC_STATUS Gponmgr_eth_getParams(char *pComponent, char *pBus, char *pPa
     return ANSC_STATUS_FAILURE;
 }
 
+#if !defined(WAN_MANAGER_UNIFICATION_ENABLED)
 static ANSC_STATUS isGponExistsInEthAgent(char *pInterface, int  *iEthVeipIndex)
 {
     char acTmpReturnValue[256] = {0};
@@ -115,6 +116,7 @@ static ANSC_STATUS isGponExistsInEthAgent(char *pInterface, int  *iEthVeipIndex)
 
     return retStatus;
 }
+#endif
 
 ANSC_STATUS Gponmgr_eth_setParams( char *pComponent, char *pBus, char *pParamName,
                                           char *pParamVal, enum dataType_e type,
@@ -159,7 +161,137 @@ ANSC_STATUS Gponmgr_eth_setParams( char *pComponent, char *pBus, char *pParamNam
     return ANSC_STATUS_SUCCESS;
 }
 
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
+ANSC_STATUS CosaDmlGetLowerLayersInstanceInWanManager(char *pLowerLayers, INT *piInstanceNumber)
+{
+    char acTmpReturnValue[256] = {0};
+    INT iLoopCount = 0;
+    INT iTotalNoofEntries = 0;
 
+    if (ANSC_STATUS_FAILURE == Gponmgr_eth_getParams(WAN_MGR_COMPONENT_NAME, WAN_MGR_DBUS_PATH, WAN_NOE_PARAM_NAME, acTmpReturnValue))
+    {
+        CcspTraceError(("%s %d Failed to get param value\n", __FUNCTION__, __LINE__));
+        return ANSC_STATUS_FAILURE;
+    }
+
+    //Total count
+    iTotalNoofEntries = atoi(acTmpReturnValue);
+    CcspTraceInfo(("%s %d - TotalNoofEntries:%d\n", __FUNCTION__, __LINE__, iTotalNoofEntries));
+
+    if (0 >= iTotalNoofEntries)
+    {
+        return ANSC_STATUS_SUCCESS;
+    }
+
+    //Traverse from loop
+    for (iLoopCount = 0; iLoopCount < iTotalNoofEntries; iLoopCount++)
+    {
+        char acTmpQueryParam[256] = {0};
+
+        //Query
+        snprintf(acTmpQueryParam, sizeof(acTmpQueryParam), WAN_IF_NAME_PARAM_NAME, iLoopCount + 1);
+
+        memset(acTmpReturnValue, 0, sizeof(acTmpReturnValue));
+        if (ANSC_STATUS_FAILURE == Gponmgr_eth_getParams(WAN_MGR_COMPONENT_NAME, WAN_MGR_DBUS_PATH, acTmpQueryParam, acTmpReturnValue))
+        {
+            CcspTraceError(("%s %d Failed to get param value\n", __FUNCTION__, __LINE__));
+            continue;
+        }
+
+        //Compare name
+        if (0 == strcmp(acTmpReturnValue, pLowerLayers))
+        {
+            *piInstanceNumber = iLoopCount + 1;
+            break;
+        }
+    }
+
+    return ANSC_STATUS_SUCCESS;
+}
+
+ANSC_STATUS CosaDmlGponSetPhyStatusForWanManager(int iVeipIndex ,char *LowerLayers, char *PhyStatus)
+{
+    char ParamName[256] = {0};
+    char ParamVal[256] = {0};
+    char ifname[16] = {0};
+    PDML_VEIP pGponVeip = NULL;
+    INT iLinkInstance = -1;
+    INT iWANInstance = -1;
+
+    if (PhyStatus == NULL)
+    {
+        CcspTraceError(("%s Invalid Physical Status\n", __FUNCTION__));
+        return ANSC_STATUS_FAILURE;
+    }
+
+    GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+    if(pGponDmlData != NULL)
+    {
+        DML_VEIP_CTRL_T* pGponVeipCtrl = pGponDmlData->gpon.Veip.pdata[iVeipIndex];
+        if(pGponVeipCtrl!= NULL)
+        {
+            pGponVeip = &(pGponVeipCtrl->dml);
+
+            // get veip interface structure
+            if (pGponVeip == NULL)
+            {
+                CcspTraceError(("Error: Null Veip Interface\n"));
+                GponMgrDml_GetData_release(pGponDmlData);
+                return ANSC_STATUS_FAILURE;
+            }
+
+            //get Veip InterDomain Name
+            snprintf(ifname, MAX_STR_ARR_SIZE, "%s", pGponVeip->InterfaceName);
+        }
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    //Get Instance for corresponding name
+    if (ANSC_STATUS_FAILURE == CosaDmlGetLowerLayersInstanceInWanManager(ifname, &iWANInstance))
+    {
+        CcspTraceError(("%s %d Failed to get Instance value\n", __FUNCTION__, __LINE__));
+        return ANSC_STATUS_FAILURE;
+    }
+
+    if (iWANInstance == -1)
+    {
+        CcspTraceError(("%s %d WAN instance not present\n", __FUNCTION__, __LINE__));
+        return ANSC_STATUS_FAILURE;
+    }
+
+    CcspTraceInfo(("%s %d WAN Instance:%d\n", __FUNCTION__, __LINE__, iWANInstance));
+
+    memset(ParamName, 0, sizeof(ParamName));
+    snprintf(ParamName, sizeof(ParamName),WAN_BASE_INTERFACE_PARAM_NAME, iWANInstance);
+    if (ANSC_STATUS_FAILURE == Gponmgr_eth_getParams(WAN_MGR_COMPONENT_NAME, WAN_MGR_DBUS_PATH,ParamName,ParamVal))
+    {
+        CcspTraceError(("%s %d Failed to get param value\n", __FUNCTION__, __LINE__));
+        return ANSC_STATUS_FAILURE;
+    }
+
+    if (strncmp(ParamVal, LowerLayers,sizeof(ParamVal)) != 0)
+    {
+        CcspTraceError(("%s %d BaseInterface is not matching with LowerLayer\n", __FUNCTION__, __LINE__));
+        return ANSC_STATUS_FAILURE;      
+    }
+	
+    //Set Link Status
+    memset(ParamName, 0, sizeof(ParamName));
+    snprintf(ParamName, sizeof(ParamName),WAN_LINK_STATUS_PARAM_NAME, iWANInstance);
+
+    if (Gponmgr_eth_setParams(WAN_MGR_COMPONENT_NAME, WAN_MGR_DBUS_PATH, ParamName, PhyStatus, ccsp_string, TRUE) != ANSC_STATUS_SUCCESS)
+    {
+        CcspTraceError(("%s %d: Unable to set param name %s\n", __FUNCTION__, __LINE__,ParamName));
+        return ANSC_STATUS_FAILURE;
+    }
+ 
+    CcspTraceInfo(("%s %d Successfully notified %s event to WAN Manager for %s interface\n", __FUNCTION__, __LINE__, PhyStatus, ifname));
+
+    return ANSC_STATUS_SUCCESS;
+
+}
+#else
 ANSC_STATUS Gponmgr_eth_addInterface(int iVeipIndex, char *LowerLayers, int *iVeipInstance)
 {
     ANSC_STATUS ret = ANSC_STATUS_SUCCESS;
@@ -250,3 +382,4 @@ ANSC_STATUS Gponmgr_eth_setEnableInterface(int iVeipInstance, BOOL bflag)
 
     return ANSC_STATUS_SUCCESS;
 }
+#endif
