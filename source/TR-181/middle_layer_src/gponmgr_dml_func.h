@@ -54,7 +54,6 @@ GponGtc_GetParamUlongValue
 
 GponPloam_GetParamUlongValue
 GponPloam_GetParamStringValue
-GponPloamRegTmr_GetParamUlongValue
 
 GponGem_GetParamUlongValue
 GponGemEthFlowIngress_GetParamUlongValue
@@ -104,7 +103,13 @@ ULONG GponPhy_Rollback(ANSC_HANDLE hInsContext);
 
 ULONG GponPhy_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*   pValue,ULONG*  pUlSize);
 
+BOOL GponPhy_SetParamStringValue(ANSC_HANDLE hInsContext, char* ParamName, char* pString);
+
 BOOL GponPhy_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
+
+BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL*   pBool);
+
+BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bValue);
 
 BOOL GponPhyRxpwr_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
 
@@ -129,8 +134,6 @@ BOOL GponGtc_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* p
 BOOL GponPloam_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
 ULONG GponPloam_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*   pValue,ULONG*  pUlSize);
-
-BOOL GponPloamRegTmr_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
 BOOL GponGem_IsUpdated(ANSC_HANDLE hInsContext);
 

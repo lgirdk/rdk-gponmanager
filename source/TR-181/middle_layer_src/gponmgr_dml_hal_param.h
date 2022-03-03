@@ -30,6 +30,8 @@
 
 #define MAX_STR_LEN 256
 
+#define TABLE_INDEX_MAX 1
+
 //Tagged specific information
 #define IEEE_802_1Q_ETHERTYPE_STR_SINGLE   "Single"
 #define IEEE_802_1Q_ETHERTYPE_STR_DOUBLE   "Double"

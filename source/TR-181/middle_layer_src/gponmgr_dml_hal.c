@@ -28,6 +28,7 @@
 #include "ansc_platform.h"
 
 #include "gpon_apis.h"
+#include "syscfg.h"
 #include "gponmgr_dml_hal.h"
 #include "gponmgr_dml_hal_param.h"
 #include "gponmgr_link_state_machine.h"
@@ -49,12 +50,12 @@
 #define GPON_MANAGER_CONF_FILE "/etc/rdk/conf/gpon_manager_conf.json"
 #define NULL_TYPE 0
 
-#define GPON_QUERY_PM    "Device.X_RDK_ONT.PhysicalMedia."
+#define GPON_QUERY_PM    "Device.X_RDK_ONT.PhysicalMedia.1."
 #define GPON_QUERY_GTC   "Device.X_RDK_ONT.Gtc."
 #define GPON_QUERY_PLOAM "Device.X_RDK_ONT.Ploam."
-#define GPON_QUERY_GEM   "Device.X_RDK_ONT.Gem."
+#define GPON_QUERY_GEM   "Device.X_RDK_ONT.GemStats.1."
 #define GPON_QUERY_OMCI  "Device.X_RDK_ONT.Omci."
-#define GPON_QUERY_VEIP  "Device.X_RDK_ONT.Veip."
+#define GPON_QUERY_VEIP  "Device.X_RDK_ONT.Veip.1."
 #define GPON_QUERY_TR69  "Device.X_RDK_ONT.TR69."
 
 #define DML_GTC_FETCH_INTERVAL 10
@@ -85,6 +86,13 @@ ANSC_STATUS GponHal_get_data(void);
  **************************************************************************************************/
 ANSC_STATUS GponHal_Init()
 {
+    char wan_type[32] = {0};
+
+    // Initialise syscfg
+    if (syscfg_init() < 0)
+         CcspTraceError(("failed to initialise syscfg"));
+
+    v_secure_system("/bin/json_hal_server_gpon /etc/rdk/conf/gpon_manager_conf.json &");
 
     if (json_hal_client_init(GPON_MANAGER_CONF_FILE) != RETURN_OK)
     {
@@ -165,6 +173,7 @@ ANSC_STATUS GponHal_get_init_data(void)
 {
     ANSC_STATUS retStatus = ANSC_STATUS_FAILURE;
     bool data_initialised = FALSE;
+    int retry_count = 1;
 
     while(data_initialised != TRUE)
     {
@@ -172,6 +181,18 @@ ANSC_STATUS GponHal_get_init_data(void)
         if(retStatus == ANSC_STATUS_SUCCESS)
         {
             data_initialised = GponHal_check_data_initiliased();
+        }
+        //TODO: Sky has partially implemented the data models. So due to this json hal request is failing for many parameters.
+        //  GponHal_check_data_initiliased is failing due to that which is causing infinite wait.
+        //  So for now we added limit on number of retries and exiting after max retries limit reaches. This need to be removed
+        //  once we are able to read all data model using json hal.
+        if(retry_count >= 0)
+        {
+            retry_count--;
+        }    
+        else
+        {
+             break;
         }
     }
 
@@ -370,6 +391,27 @@ ANSC_STATUS GponHal_SetParamInt(INT* SValue, char* HalName, INT iValue)
     return ANSC_STATUS_FAILURE;
 }
 
+ANSC_STATUS GponHal_SetParamString(char* SValue, char* HalName, char* pString)
+{
+    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
+
+    if (pString != NULL)
+    {
+       strncpy(strValue,JSON_STR_TRUE,strlen(JSON_STR_TRUE)+1);
+    }
+    else
+    {
+       strncpy(strValue,JSON_STR_FALSE,strlen(JSON_STR_FALSE)+1);
+    }
+    if (GponHal_setParam(HalName, PARAM_STRING, strValue) == ANSC_STATUS_SUCCESS)
+    {
+       AnscCopyString(SValue, pString);
+       return ANSC_STATUS_SUCCESS;
+    }
+
+    return ANSC_STATUS_FAILURE;
+}
+
 void eventcb_PhysicalMediaStatus(const char *msg, const int len)
 {
     ANSC_STATUS ret = ANSC_STATUS_FAILURE;
@@ -486,6 +528,7 @@ void eventcb_VeipOperationalState(const char *msg, const int len)
     ANSC_STATUS ret = ANSC_STATUS_FAILURE;
     char event_name[256] = {'\0'};
     char event_val[256] = {'\0'};
+    int hal_index = 0;
 
     ret = get_event_param(msg, len, event_name, event_val);
     if(ret == ANSC_STATUS_SUCCESS)
@@ -502,6 +545,32 @@ void eventcb_VeipOperationalState(const char *msg, const int len)
                 //update data
                 ret = Map_hal_dml_veip(pGponVeipList, event_name, event_val);
 
+                /*TODO : Need revisit based on outcome of CS00012203760 
+		 Change added to check the veip adminstate whenever we receive the operstate
+                 callback and if its "Unlock" then start the state machine.*/
+                gpon_hal_get_veip_index(event_name, &hal_index);
+                if(hal_index > 0)
+                {
+                    DML_VEIP_CTRL_T* pGponVeipCtrl = pGponDmlData->gpon.Veip.pdata[hal_index-1];
+
+                    if(pGponVeipCtrl!= NULL)
+                    {
+                        if(pGponVeipCtrl->sm_created == FALSE)
+                        {
+                            DML_VEIP* pGponVeip = &(pGponVeipCtrl->dml);
+                            if(pGponVeip->AdministrativeState == Unlock)
+                            {
+                                //start SM thread
+                                ret = GponMgr_Link_StateMachine_Start(pGponVeip);
+
+                                if(ret == ANSC_STATUS_SUCCESS)
+                                {
+                                    pGponVeipCtrl->sm_created = TRUE;
+                                }
+                            }
+                        }
+                    }
+                }
                 //release data
                 GponMgrDml_GetData_release(pGponDmlData);
             }
@@ -1144,6 +1213,34 @@ ANSC_STATUS GponHal_send_config(void)
                     sprintf(req_param_str, "Device.X_RDK_ONT.Veip.%d.EthernetFlow.Ingress.Q-VLAN.Vid", pVeip->uInstanceNumber);
                     retStatus = GponHal_SetParamInt(&(pVeip->EthernetFlow.Ingress.QVLAN.Vid), req_param_str, pVeip->EthernetFlow.Ingress.QVLAN.Vid);
                     if(retStatus != ANSC_STATUS_SUCCESS) break;
+                }
+            }
+        }
+
+        //PM.Enable, PM.Alias, PM.LowerLayers
+        if(retStatus == ANSC_STATUS_SUCCESS)
+        {
+            for (int idx = 0; idx < pGponPhyMediaList->ulQuantity; ++idx)
+            {
+                if(pGponPhyMediaList->pdata[idx] != NULL)
+                {
+                    DML_PHY_MEDIA* pPhyMedia = &(pGponPhyMediaList->pdata[idx]->dml);
+
+                    sprintf(req_param_str, "Device.X_RDK_ONT.PhysicalMedia.%d.Enable", pPhyMedia->uInstanceNumber);
+
+                    retStatus = GponHal_SetParamBool(&(pPhyMedia->Enable), req_param_str, pPhyMedia->Enable);
+                    if(retStatus != ANSC_STATUS_SUCCESS) break;
+
+                    sprintf(req_param_str, "Device.X_RDK_ONT.PhysicalMedia.%d.Alias", pPhyMedia->uInstanceNumber);
+
+                    retStatus = GponHal_SetParamString(&(pPhyMedia->Alias), req_param_str, pPhyMedia->Alias);
+                    if(retStatus != ANSC_STATUS_SUCCESS) break;
+
+                    sprintf(req_param_str, "Device.X_RDK_ONT.PhysicalMedia.%d.LowerLayers", pPhyMedia->uInstanceNumber);
+
+                    retStatus = GponHal_SetParamString(&(pPhyMedia->LowerLayers), req_param_str, pPhyMedia->LowerLayers);
+                    if(retStatus != ANSC_STATUS_SUCCESS) break;
+
                 }
             }
         }

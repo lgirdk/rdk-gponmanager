@@ -57,7 +57,7 @@ DML_POWER, *PDML_POWER;
 typedef struct
 _DML_VOLT
 {
-    INT     VoltageLevel;
+    INT     CurrentVoltage;
 }
 DML_VOLT, *PDML_VOLT;
 
@@ -108,8 +108,8 @@ _DML_GTC
     ULONG         CorrectedFecBytes;
     ULONG         CorrectedFecCodeWords;
     ULONG         UnCorrectedFecCodeWords;
-    ULONG         TotalFecCodeWords;
-    ULONG         HecErrorCount;
+    ULONG         GtcTotalFecCodeWords;
+    ULONG         GtcHecErrorCount;
     ULONG         PSBdHecErrors;
     ULONG         FrameHecErrors;
     ULONG         FramesLost;
@@ -209,8 +209,13 @@ _DML_PHY_MEDIA
     DML_CONNECTOR_ENUM          Connector;
     UINT                        NominalBitRateDownstream;
     UINT                        NominalBitRateUpstream;
+    BOOLEAN 			Enable;
     DML_PHYMEDIASTATUS_ENUM     Status;
     DML_REDUNDANCYSTATE_ENUM    RedundancyState;
+    CHAR                        Alias[64];
+    UINT                        LastChange;
+    CHAR                        LowerLayers[1024];
+    BOOLEAN                     Upstream;
     DML_PERFORM                 PerformThreshold;
     DML_POWER                   RxPower;
     DML_POWER                   TxPower;
@@ -236,14 +241,6 @@ _REG_STATE_ENUM
 } REG_STATE_ENUM;
 
 typedef struct
-_DML_REG_TIMER
-{
-    ULONG         TO1;
-    ULONG         TO2;
-}
-DML_REG_TIMER, *PDML_REG_TIMER;
-
-typedef struct
 _DML_PLOAM
 {
     UINT                OnuId;
@@ -254,16 +251,17 @@ _DML_PLOAM
     ULONG               TxMessageCount;
     ULONG               RxMessageCount;
     ULONG               MicErrors;
+    ULONG         	TO1Timer;
+    ULONG         	TO2Timer;
     ULONG               LastFetchedTime;
-    DML_REG_TIMER       RegistrationTimers;
 }
 DML_PLOAM, *PDML_PLOAM;
 
 typedef struct
 _DML_OMCI
 {
-    UINT        RxBaseLineMessageCountValid;
-    UINT        RxExtendedMessageCountValid;
+    UINT        BaselineMessageCount;
+    UINT        ExtendedMessageCount;
     ULONG       MicErrors;
     ULONG       LastFetchedTime;
 }
@@ -353,7 +351,7 @@ typedef struct
 _DML_VEIP
 {
     ULONG              uInstanceNumber;
-    ULONG              MeId;
+    ULONG              ManagedEntityId;
     DML_LOCK_ENUM      AdministrativeState;
     DML_OPERSTATE_ENUM OperationalState;
     CHAR               InterDomainName[25];

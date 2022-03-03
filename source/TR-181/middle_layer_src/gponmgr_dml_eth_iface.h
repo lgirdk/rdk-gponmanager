@@ -47,26 +47,20 @@
 //WAN Agent
 #define WAN_MGR_DBUS_PATH                     "/com/cisco/spvtg/ccsp/wanmanager"
 #define WAN_MGR_COMPONENT_NAME                "eRT.com.cisco.spvtg.ccsp.wanmanager"
-#define WAN_MGR_GPON_CPE_NAME                 "Device.X_RDK_WanManager.CPEInterface.3.Name"
+#define WAN_NOE_PARAM_NAME                    "Device.X_RDK_WanManager.CPEInterfaceNumberOfEntries"
+#define WAN_IF_NAME_PARAM_NAME                "Device.X_RDK_WanManager.CPEInterface.%d.Name"
+#define WAN_LINK_STATUS_PARAM_NAME            "Device.X_RDK_WanManager.CPEInterface.%d.LinkStatus"
+#define WAN_BASE_INTERFACE_PARAM_NAME         "Device.X_RDK_WanManager.CPEInterface.%d.BaseInterface"
 
-//ETH Manager
-#define ETH_MGR_COMPONENT_NAME                "eRT.com.cisco.spvtg.ccsp.ethagent"
-#define ETH_MGR_DBUS_PATH                     "/com/cisco/spvtg/ccsp/ethagent"
-
-#define ETH_MGR_IFACE_TABLE_NAME              "Device.Ethernet.X_RDK_Interface."
-#define ETH_MGR_IFACE                         "Device.Ethernet.X_RDK_Interface.%d."
-#define ETH_MGR_NO_OF_IFACE                   "Device.Ethernet.X_RDK_InterfaceNumberOfEntries"
-#define ETH_MGR_IFACE_NAME                    ETH_MGR_IFACE"Name"
-#define ETH_MGR_IFACE_LOWERLAYERS             ETH_MGR_IFACE"LowerLayers"
-#define ETH_MGR_IFACE_ENABLE                  ETH_MGR_IFACE"Enable"
-
+#define INTERFACE_UP "Up"
+#define INTERFACE_DOWN "Down"
 
 extern ANSC_HANDLE bus_handle;
 
-ANSC_STATUS Gponmgr_eth_addInterface( int iVeipIndex, char *LowerLayers, int *iVeipInstance);
-
-ANSC_STATUS Gponmgr_eth_setEnableInterface(int iVeipInstance, BOOL bflag);
-
 ANSC_STATUS Gponmgr_eth_setParams( char *pComponent, char *pBus, char *pParamName, char *pParamVal, enum dataType_e type, unsigned int bCommitFlag);
+
+ANSC_STATUS CosaDmlGponSetPhyStatusForWanManager(int iVeipIndex ,char *LowerLayers,char *PhyStatus);
+
+ANSC_STATUS CosaDmlGetLowerLayersInstanceInWanManager(char *pLowerLayers, INT *piInstanceNumber);
 
 #endif

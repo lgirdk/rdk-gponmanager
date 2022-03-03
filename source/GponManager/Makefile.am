@@ -31,6 +31,6 @@ GponManager_DEPENDENCIES = \
 
 GponManager_CFLAGS = -D_ANSC_LINUX -D_ANSC_USER -D_ANSC_LITTLE_ENDIAN_ -DFEATURE_SUPPORT_RDKLOG $(DBUS_CFLAGS) $(SYSTEMD_CFLAGS)
 GponManager_SOURCES = ssp_action.c ssp_messagebus_interface.c ssp_main.c gponmgr_controller.c gponmgr_link_state_machine.c
-GponManager_LDFLAGS = -lccsp_common -lrdkloggers $(DBUS_LIBS) $(SYSTEMD_LDFLAGS)
+GponManager_LDFLAGS = -lccsp_common -lrdkloggers -lsecure_wrapper $(DBUS_LIBS) $(SYSTEMD_LDFLAGS)
 GponManager_LDADD =  $(GponManager_DEPENDENCIES)
 

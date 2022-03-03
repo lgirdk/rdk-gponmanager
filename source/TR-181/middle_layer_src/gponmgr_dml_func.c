@@ -46,8 +46,6 @@
 #endif
 
 
-
-
 /***********************************************************************
  IMPORTANT NOTE:
 
@@ -266,6 +264,72 @@ ULONG GponPhy_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* 
                 AnscCopyString(pValue, pGponPhy->ModuleFirmwareVersion);
                 ret = 0;
             }
+            else if( AnscEqualString(ParamName, "Alias", TRUE))
+            {
+                AnscCopyString(pValue, pGponPhy->Alias);
+                ret = 0;
+            }
+            else if( AnscEqualString(ParamName, "LowerLayers", TRUE))
+            {
+                AnscCopyString(pValue, pGponPhy->LowerLayers);
+                ret = 0;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL GponPhy_SetParamStringValue(ANSC_HANDLE hInsContext, char* ParamName, char* pString)
+{
+    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
+    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
+    char strName[JSON_MAX_STR_ARR_SIZE]={0};
+    BOOL ret = FALSE;
+
+    if(pGponCtrl != NULL)
+    {
+        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+        if(pGponDmlData != NULL)
+        {
+            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
+
+            if( AnscEqualString(ParamName, "Alias", TRUE))
+            {
+		if (AnscSizeOfString(pString) >= sizeof(pGponPhy->Alias))
+        	{
+                	ret = FALSE;
+        	}
+                else
+		{
+                    	AnscCopyString(strValue, pString);
+		}
+                sprintf(strName, GPON_HAL_PM_ALIAS, pGponPhy->uInstanceNumber);
+                if (GponHal_setParam(strName, PARAM_STRING, strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    AnscCopyString(pGponPhy->Alias, pString);
+                    ret = TRUE;
+                }
+            }
+            else if( AnscEqualString(ParamName, "LowerLayers", TRUE))
+            {
+                if (AnscSizeOfString(pString) >= sizeof(pGponPhy->LowerLayers))
+                {
+                        ret = FALSE;
+                }
+                else
+                {
+                        AnscCopyString(strValue, pString);
+                }
+                sprintf(strName, GPON_HAL_PM_LOWERLAYERS, pGponPhy->uInstanceNumber);
+                if (GponHal_setParam(strName, PARAM_STRING, strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    AnscCopyString(pGponPhy->LowerLayers, pString);
+                    ret = TRUE;
+                }
+            }
 
             GponMgrDml_GetData_release(pGponDmlData);
         }
@@ -321,6 +385,101 @@ BOOL GponPhy_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* 
                 *puLong = (ULONG) pGponPhy->RedundancyState;
                 ret = TRUE;
             }
+            else if( AnscEqualString(ParamName, "LastChange", TRUE))
+            {
+                *puLong = (ULONG) pGponPhy->LastChange;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL* pBool)
+{
+    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
+    BOOL ret = FALSE;
+
+    if(pGponCtrl != NULL)
+    {
+        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+        if(pGponDmlData != NULL)
+        {
+            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
+
+            if( AnscEqualString(ParamName, "Enable", TRUE))
+            {
+                *pBool = pGponPhy->Enable;
+                ret = TRUE;
+            }
+
+            else if( AnscEqualString(ParamName, "Upstream", TRUE))
+            {
+                *pBool = pGponPhy->Upstream;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bValue)
+{
+    DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
+    char strValue[JSON_MAX_VAL_ARR_SIZE]={0};
+    char strName[JSON_MAX_STR_ARR_SIZE]={0};
+    BOOL ret = FALSE;
+
+
+    if(pGponCtrl != NULL)
+    {
+        GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+        if(pGponDmlData != NULL)
+        {
+            DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
+
+            if( AnscEqualString(ParamName, "Enable", TRUE))
+            {
+                if (bValue==TRUE)
+                {
+                    strncpy(strValue,JSON_STR_TRUE,strlen(JSON_STR_TRUE)+1);
+                }
+                else
+                {
+                    strncpy(strValue,JSON_STR_FALSE,strlen(JSON_STR_FALSE)+1);
+                }
+
+                sprintf(strName, GPON_HAL_PM_ENABLE, pGponPhy->uInstanceNumber);
+                if (GponHal_setParam(strName, PARAM_BOOLEAN, strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    pGponPhy->Enable = bValue;
+                    ret = TRUE;
+                }
+            }
+            else if( AnscEqualString(ParamName, "Upstream", TRUE))
+            {
+                if (bValue==TRUE)
+                {
+                    strncpy(strValue,JSON_STR_TRUE,strlen(JSON_STR_TRUE)+1);
+                }
+                else
+                {
+                    strncpy(strValue,JSON_STR_FALSE,strlen(JSON_STR_FALSE)+1);
+                }
+
+                sprintf(strName, GPON_HAL_PM_UPSTREAM, pGponPhy->uInstanceNumber);
+                if (GponHal_setParam(strName, PARAM_BOOLEAN, strValue) == ANSC_STATUS_SUCCESS)
+                {
+                    pGponPhy->Upstream = bValue;
+                    ret = TRUE;
+                }
+            }
 
             GponMgrDml_GetData_release(pGponDmlData);
         }
@@ -333,6 +492,7 @@ BOOL GponPhyRxpwr_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* 
 {
     DML_PHY_MEDIA_CTRL_T* pGponCtrl = (DML_PHY_MEDIA_CTRL_T*) hInsContext;
     BOOL ret = FALSE;
+
 
     if(pGponCtrl != NULL)
     {
@@ -497,9 +657,9 @@ BOOL GponPhyVoltage_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int
         {
             DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
 
-            if( AnscEqualString(ParamName, "VoltageLevel", TRUE))
+            if( AnscEqualString(ParamName, "CurrentVoltage", TRUE))
             {
-                *pInt = (int) pGponPhy->Voltage.VoltageLevel;
+                *pInt = (int) pGponPhy->Voltage.CurrentVoltage;
                 ret = TRUE;
             }
             
@@ -705,14 +865,14 @@ BOOL GponGtc_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* p
                 *puLong= pGponGtc->UnCorrectedFecCodeWords;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "TotalFecCodeWords", TRUE))
+            else if( AnscEqualString(ParamName, "GtcTotalFecCodeWords", TRUE))
             {
-                *puLong= pGponGtc->TotalFecCodeWords;
+                *puLong= pGponGtc->GtcTotalFecCodeWords;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "HecErrorCount", TRUE))
+            else if( AnscEqualString(ParamName, "GtcHecErrorCount", TRUE))
             {
-                *puLong= pGponGtc->HecErrorCount;
+                *puLong= pGponGtc->GtcHecErrorCount;
                 ret = TRUE;
             }
             else if( AnscEqualString(ParamName, "PSBdHecErrors", TRUE))
@@ -780,6 +940,16 @@ BOOL GponPloam_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG*
                 *puLong= pGponPloam->MicErrors;
                 ret = TRUE;
             }
+            else if( AnscEqualString(ParamName, "TO1Timer", TRUE))
+            {
+                *puLong= pGponPloam->TO1Timer;
+                ret = TRUE;
+            }
+            else if( AnscEqualString(ParamName, "TO2Timer", TRUE))
+            {
+                *puLong= pGponPloam->TO2Timer;
+                ret = TRUE;
+            }
         }
 
         GponMgrDml_GetData_release(pGponDmlData);
@@ -809,32 +979,6 @@ ULONG GponPloam_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char
                 AnscCopyString(pValue, pGponPloam->VendorId);
                 ret = 0;
             }
-        }
-
-        GponMgrDml_GetData_release(pGponDmlData);
-    }
-
-    return ret;
-}
-
-BOOL GponPloamRegTmr_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong)
-{
-    BOOL ret = FALSE;
-
-    GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
-    if(pGponDmlData != NULL)
-    {
-        DML_PLOAM* pGponPloam = &(pGponDmlData->gpon.Ploam);
-
-        if( AnscEqualString(ParamName, "TO1", TRUE))
-        {
-            *puLong= pGponPloam->RegistrationTimers.TO1;
-            ret = TRUE;
-        }
-        else if( AnscEqualString(ParamName, "TO2", TRUE))
-        {
-            *puLong= pGponPloam->RegistrationTimers.TO2;
-            ret = TRUE;
         }
 
         GponMgrDml_GetData_release(pGponDmlData);
@@ -1162,14 +1306,14 @@ BOOL GponOmci_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt
         DML_OMCI* pGponOmci = &(pGponDmlData->gpon.Omci);
         if ( GponHal_get_omci(pGponOmci) == ANSC_STATUS_SUCCESS)
         {
-            if( AnscEqualString(ParamName, "RxBaseLineMessageCountValid", TRUE))
+            if( AnscEqualString(ParamName, "BaselineMessageCount", TRUE))
             {
-                *pInt = (int) pGponOmci->RxBaseLineMessageCountValid;
+                *pInt = (int) pGponOmci->BaselineMessageCount;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "RxExtendedMessageCountValid", TRUE))
+            else if( AnscEqualString(ParamName, "ExtendedMessageCount", TRUE))
             {
-                *pInt = (int) pGponOmci->RxExtendedMessageCountValid;
+                *pInt = (int) pGponOmci->ExtendedMessageCount;
                 ret = TRUE;
             }
         }
@@ -1326,9 +1470,9 @@ BOOL GponVeip_GetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG
         {
             DML_VEIP* pGponVeip = &(pGponCtrl->dml);
 
-            if( AnscEqualString(ParamName, "MeId", TRUE))
+            if( AnscEqualString(ParamName, "ManagedEntityId", TRUE))
             {
-                *puLong = pGponVeip->MeId;
+                *puLong = pGponVeip->ManagedEntityId;
                 ret = TRUE;
             }
             else if( AnscEqualString(ParamName, "AdministrativeState", TRUE))

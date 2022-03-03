@@ -160,6 +160,9 @@
     "setParameterSupportedList": {
       "description": "Supported data model parameter list for setParameters action",
       "anyOf": [
+          { "$ref": "#/definitions/ontPhysicalMediaEnable" },
+          { "$ref": "#/definitions/ontPhysicalMediaAlias" },
+          { "$ref": "#/definitions/ontPhysicalMediaLowerLayers" },
           { "$ref": "#/definitions/ontPhysicalMediaRxPowerSignalLevelLowerThreshold" },
           { "$ref": "#/definitions/ontPhysicalMediaRxPowerSignalLevelUpperThreshold" },
           { "$ref": "#/definitions/ontPhysicalMediaTxPowerSignalLevelLowerThreshold" },
@@ -188,8 +191,13 @@
           { "$ref": "#/definitions/ontPhysicalMediaModuleFirmwareVersion" },
           { "$ref": "#/definitions/ontPhysicalMediaPonMode" },
           { "$ref": "#/definitions/ontPhysicalMediaConnector" },
+          { "$ref": "#/definitions/ontPhysicalMediaEnable" },
           { "$ref": "#/definitions/ontPhysicalMediaStatus" },
           { "$ref": "#/definitions/ontPhysicalMediaRedundancyState" },
+          { "$ref": "#/definitions/ontPhysicalMediaAlias" },
+          { "$ref": "#/definitions/ontPhysicalMediaLastChange" },
+          { "$ref": "#/definitions/ontPhysicalMediaLowerLayers" },
+          { "$ref": "#/definitions/ontPhysicalMediaUpstream" },
           { "$ref": "#/definitions/ontPhysicalMediaNominalBitRateDownstream" },
           { "$ref": "#/definitions/ontPhysicalMediaNominalBitRateUpstream" },
           { "$ref": "#/definitions/ontPhysicalMediaPerformanceThresholdObj" },
@@ -204,7 +212,7 @@
           { "$ref": "#/definitions/ontPhysicalMediaTxPowerSignalLevelLowerThreshold" },
           { "$ref": "#/definitions/ontPhysicalMediaTxPowerSignalLevelUpperThreshold" },
           { "$ref": "#/definitions/ontPhysicalMediaVoltageObj" },
-          { "$ref": "#/definitions/ontPhysicalMediaVoltageLevel" },
+          { "$ref": "#/definitions/ontPhysicalMediaCurrentVoltage" },
           { "$ref": "#/definitions/ontPhysicalMediaBiasObj" },
           { "$ref": "#/definitions/ontPhysicalMediaCurrentBias" },
           { "$ref": "#/definitions/ontPhysicalMediaTemperatureObj" },
@@ -229,7 +237,7 @@
           { "$ref": "#/definitions/ontGtcCorrectedFecCodeWords" },
           { "$ref": "#/definitions/ontGtcUnCorrectedFecCodeWords" },
           { "$ref": "#/definitions/ontGtcGtcTotalFecCodeWords" },
-          { "$ref": "#/definitions/ontGtcHecErrorCount" },
+          { "$ref": "#/definitions/ontGtcGtcHecErrorCount" },
           { "$ref": "#/definitions/ontGtcPSBdHecErrors" },
           { "$ref": "#/definitions/ontGtcFrameHecErrors" },
           { "$ref": "#/definitions/ontGtcFramesLost" },
@@ -242,21 +250,20 @@
           { "$ref": "#/definitions/ontPloamTxMessageCount" },
           { "$ref": "#/definitions/ontPloamRxMessageCount" },
           { "$ref": "#/definitions/ontPloamMicErrors" },
-          { "$ref": "#/definitions/ontPloamRegistrationTimersObj" },
-          { "$ref": "#/definitions/ontPloamRegistrationTimersTO1" },
-          { "$ref": "#/definitions/ontPloamRegistrationTimersTO2" },
+          { "$ref": "#/definitions/ontPloamTO1Timer" },
+          { "$ref": "#/definitions/ontPloamTO2Timer" },
           { "$ref": "#/definitions/ontGemObj" },
           { "$ref": "#/definitions/ontGemPortId" },
           { "$ref": "#/definitions/ontGemTrafficType" },
           { "$ref": "#/definitions/ontGemTransmittedFrames" },
           { "$ref": "#/definitions/ontGemReceivedFrames" },
           { "$ref": "#/definitions/ontOmciObj" },
-          { "$ref": "#/definitions/ontOmciRxBaseLineMessageCountValid" },
-          { "$ref": "#/definitions/ontOmciRxExtendedMessageCountValid" },
+          { "$ref": "#/definitions/ontOmciBaselineMessageCount" },
+          { "$ref": "#/definitions/ontOmciExtendedMessageCount" },
           { "$ref": "#/definitions/ontOmciMicErrors" },
           { "$ref": "#/definitions/ontVeipObj" },
           { "$ref": "#/definitions/ontVeipInterfaceName" },
-          { "$ref": "#/definitions/ontVeipMeId" },
+          { "$ref": "#/definitions/ontVeipManagedEntityId" },
           { "$ref": "#/definitions/ontVeipAdministrativeState" },
           { "$ref": "#/definitions/ontVeipOperationalState" },
           { "$ref": "#/definitions/ontVeipInterDomainName" },
@@ -518,6 +525,23 @@
       }
     },
 
+    "ontPhysicalMediaEnable": {
+      "description": "The Enable, indicates whether the interface is enabled or disbled. (Access = Read-Write)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.Enable$"
+        },
+        "type": {
+          "type": "string",
+          "const": "boolean"
+        },
+        "value": { "type": "boolean" }
+      }
+    },
+
     "ontPhysicalMediaStatus": {
       "description": "It shows the current operational status of the optical interface at physical level (Access = Read-Only)",
       "type": "object",
@@ -552,6 +576,83 @@
           "const": "string"
         },
         "value": { "$ref": "#/definitions/redundancyStateEnumList" }
+      }
+    },
+
+    "ontPhysicalMediaAlias": {
+      "description": "The alias, it shows a non-volatile unique key used to reference this instance. Alias provides a mechanism for a Controller to label this instance for future reference. (Access = Read-Write)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.Alias$"
+        },
+        "type": {
+          "type": "string",
+          "const": "string"
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 64
+        }
+      }
+    },
+
+    "ontPhysicalMediaLastChange": {
+      "description": "The last change, it shows the accumulated time in seconds since the DSL line entered its current operational state. (Access = Read-Only)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.LastChange$"
+        },
+        "type": {
+          "type": "string",
+          "const": "unsignedInt"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+
+    "ontPhysicalMediaLowerLayers": {
+      "description": "The lower layers, it shows comma-separated list (maximum list length 1024) of strings. (Access = Read-Write)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.LowerLayers$"
+        },
+        "type": {
+          "type": "string",
+          "const": "string"
+        },
+        "value": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      }
+    },
+
+    "ontPhysicalMediaUpstream": {
+      "description": "The Upstream, indicates whether the interface points towards the Internet (true) or towards End Devices (false). (Access = Read-Only)",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.Upstream$"
+        },
+        "type": {
+          "type": "string",
+          "const": "boolean"
+        },
+        "value": { "type": "boolean" }
       }
     },
 
@@ -789,14 +890,14 @@
       }
     },
 
-    "ontPhysicalMediaVoltageLevel": {
+    "ontPhysicalMediaCurrentVoltage": {
       "description": "The voltage measured the optical module (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.Voltage\\.VoltageLevel$"
+          "pattern": "^Device\\.X_RDK_ONT\\.PhysicalMedia\\.\\d+\\.Voltage\\.CurrentVoltage$"
         },
         "type": {
           "type": "string",
@@ -1220,7 +1321,7 @@
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Gtc.TotalFecCodeWords"
+          "const": "Device.X_RDK_ONT.Gtc.GtcTotalFecCodeWords"
         },
         "type": {
           "type": "string",
@@ -1233,14 +1334,14 @@
       }
     },
 
-    "ontGtcHecErrorCount": {
+    "ontGtcGtcHecErrorCount": {
       "description": "The number of FEC words included into a physical burst payload. (Reference: 'FS HEC error count' defined in Table C.14.1 of ITU-T G.9807) (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Gtc.HecErrorCount"
+          "const": "Device.X_RDK_ONT.Gtc.GtcHecErrorCount"
         },
         "type": {
           "type": "string",
@@ -1486,24 +1587,14 @@
       }
     },
 
-    "ontPloamRegistrationTimersObj": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-           "const": "Device.X_RDK_ONT.Ploam.RegistrationTimers."
-        }
-      }
-    },
-
-    "ontPloamRegistrationTimersTO1": {
+    "ontPloamTO1Timer": {
       "description": "Ranging timer (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Ploam.RegistrationTimers.TO1"
+          "const": "Device.X_RDK_ONT.Ploam.TO1Timer"
         },
         "type": {
           "type": "string",
@@ -1516,14 +1607,14 @@
       }
     },
 
-    "ontPloamRegistrationTimersTO2": {
+    "ontPloamTO2Timer": {
       "description": "Loss of downstream synchronization (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Ploam.RegistrationTimers.TO2"
+          "const": "Device.X_RDK_ONT.Ploam.TO2Timer"
         },
         "type": {
           "type": "string",
@@ -1986,14 +2077,14 @@
       }
     },
 
-    "ontOmciRxBaseLineMessageCountValid": {
+    "ontOmciBaselineMessageCount": {
       "description": "Count of OMCI messages (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Omci.RxBaseLineMessageCountValid"
+          "const": "Device.X_RDK_ONT.Omci.BaselineMessageCount"
         },
         "type": {
           "type": "string",
@@ -2006,14 +2097,14 @@
       }
     },
 
-    "ontOmciRxExtendedMessageCountValid": {
+    "ontOmciExtendedMessageCount": {
       "description": "Count of OMCI messages (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "const": "Device.X_RDK_ONT.Omci.RxExtendedMessageCountValid"
+          "const": "Device.X_RDK_ONT.Omci.ExtendedMessageCount"
         },
         "type": {
           "type": "string",
@@ -2076,14 +2167,14 @@
       }
     },
 
-    "ontVeipMeId": {
+    "ontVeipManagedEntityId": {
       "description": "Identifier of the VEIP ME (Access = Read-Only)",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
-          "pattern": "^Device\\.X_RDK_ONT\\.Veip\\.\\d+\\.MeId$"
+          "pattern": "^Device\\.X_RDK_ONT\\.Veip\\.\\d+\\.ManagedEntityId$"
         },
         "type": {
           "type": "string",

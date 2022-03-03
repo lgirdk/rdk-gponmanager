@@ -21,7 +21,10 @@
                             <func_GetEntryCount>GponPhy_GetEntryCount</func_GetEntryCount>
                             <func_GetEntry>GponPhy_GetEntry</func_GetEntry>
                             <func_GetParamStringValue>GponPhy_GetParamStringValue</func_GetParamStringValue>
+                            <func_SetParamStringValue>GponPhy_SetParamStringValue</func_SetParamStringValue>
                             <func_GetParamUlongValue>GponPhy_GetParamUlongValue</func_GetParamUlongValue>
+                            <func_GetParamBoolValue>GponPhy_GetParamBoolValue</func_GetParamBoolValue>
+                            <func_SetParamBoolValue>GponPhy_SetParamBoolValue</func_SetParamBoolValue>
                             <func_Validate>GponPhy_Validate</func_Validate>
                             <func_Commit>GponPhy_Commit</func_Commit>
                             <func_Rollback>GponPhy_Rollback</func_Rollback>
@@ -73,6 +76,12 @@
                                 <syntax>uint32</syntax>
                             </parameter>
                             <parameter>
+                                <name>Enable</name>
+                                <type>boolean</type>
+                                <syntax>bool</syntax>
+                                <writable>true</writable>
+                            </parameter>
+                            <parameter>
                                 <name>Status</name>
                                 <type>string: Up(0),Down(1),Unknown(2),Dormant(3),NotPresent(4),LowerLayerDown(5),Error(6)</type>
                                 <syntax>uint32/mapped</syntax>
@@ -81,6 +90,28 @@
                                 <name>RedundancyState</name>
                                 <type>string: Active(0),Standby(1)</type>
                                 <syntax>uint32/mapped</syntax>
+                            </parameter>
+                            <parameter>
+                            	<name>Alias</name>
+                            	<type>string(64)</type>
+                            	<syntax>string</syntax>
+                            	<writable>true</writable>
+                            </parameter>
+                            <parameter>
+                                <name>LastChange</name>
+                                <type>unsignedInt</type>
+                                <syntax>uint32</syntax>
+                            </parameter>
+                            <parameter>
+                            	<name>LowerLayers</name>
+                           	<type>string(1024)</type>
+                            	<syntax>string</syntax>
+                            	<writable>true</writable>
+                            </parameter>
+                            <parameter>
+                            	<name>Upstream</name>
+                            	<type>boolean</type>
+                            	<syntax>bool</syntax>
                             </parameter>
                         </parameters>
                         <objects>                                
@@ -146,7 +177,7 @@
                                     </functions>
                                     <parameters>
                                         <parameter>
-                                            <name>VoltageLevel</name>
+                                            <name>CurrentVoltage</name>
                                             <type>int</type>
                                             <syntax>int</syntax>
                                         </parameter>
@@ -303,12 +334,12 @@
                                 <syntax>uint32</syntax>
                             </parameter>
                             <parameter>
-                                <name>TotalFecCodeWords</name>
+                                <name>GtcTotalFecCodeWords</name>
                                 <type>unsignedInt</type>
                                 <syntax>uint32</syntax>
                             </parameter>
                             <parameter>
-                                <name>HecErrorCount</name>
+                                <name>GtcHecErrorCount</name>
                                 <type>unsignedInt</type>
                                 <syntax>uint32</syntax>
                             </parameter>
@@ -377,28 +408,17 @@
                                 <type>unsignedInt</type>
                                 <syntax>uint32</syntax>
                             </parameter>
+                            <parameter>
+                                <name>TO1Timer</name>
+                                <type>unsignedInt</type>
+                                <syntax>uint32</syntax>
+                            </parameter>
+                            <parameter>
+                                <name>TO2Timer</name>
+                                <type>unsignedInt</type>
+                                <syntax>uint32</syntax>
+                            </parameter>
                         </parameters>
-                        <objects>
-                            <object>
-                                <name>RegistrationTimers</name>
-                                <objectType>object</objectType>
-                                <functions>
-                                    <func_GetParamUlongValue>GponPloamRegTmr_GetParamUlongValue</func_GetParamUlongValue>
-                                </functions>
-                                <parameters>
-                                    <parameter>
-                                        <name>TO1</name>
-                                        <type>unsignedInt</type>
-                                        <syntax>uint32</syntax>
-                                    </parameter>
-                                    <parameter>
-                                        <name>TO2</name>
-                                        <type>unsignedInt</type>
-                                        <syntax>uint32</syntax>
-                                    </parameter>
-                                </parameters>
-                            </object>
-                        </objects>
                     </object>
                     <object>
                         <name>Gem</name>
@@ -582,12 +602,12 @@
                         </functions>
                         <parameters>
                             <parameter>
-                                <name>RxBaseLineMessageCountValid</name>
+                                <name>BaselineMessageCount</name>
                                 <type>int</type>
                                 <syntax>int</syntax>
                             </parameter>
                             <parameter>
-                                <name>RxExtendedMessageCountValid</name>
+                                <name>ExtendedMessageCount</name>
                                 <type>int</type>
                                 <syntax>int</syntax>
                             </parameter>
@@ -615,7 +635,7 @@
                         </functions>
                         <parameters>
                             <parameter>
-                                <name>MeId</name>
+                                <name>ManagedEntityId</name>
                                 <type>unsignedInt</type>
                                 <syntax>uint32</syntax>
                             </parameter>

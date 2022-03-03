@@ -159,8 +159,13 @@ void GponMgrDml_SetDefaultPhyMedia(DML_PHY_MEDIA_CTRL_T* gponPhyMediaData)
         gponPhyMedia->Connector = LC;
         gponPhyMedia->NominalBitRateDownstream = 0;
         gponPhyMedia->NominalBitRateUpstream = 0;
+        gponPhyMedia->Enable = false;
         gponPhyMedia->Status = NotPresent;
         gponPhyMedia->RedundancyState = Active;
+        memset(gponPhyMedia->Alias, 0, 256);
+        gponPhyMedia->LastChange = 0;
+        memset(gponPhyMedia->LowerLayers, 0, 256);
+        gponPhyMedia->Upstream = false;
         
         gponPhyMedia->PerformThreshold.SignalFail = 0;
         gponPhyMedia->PerformThreshold.SignalDegrade = 0;
@@ -173,7 +178,7 @@ void GponMgrDml_SetDefaultPhyMedia(DML_PHY_MEDIA_CTRL_T* gponPhyMediaData)
         gponPhyMedia->TxPower.SignalLevelLowerThreshold = 0;
         gponPhyMedia->TxPower.SignalLevelUpperThreshold = 0;
         
-        gponPhyMedia->Voltage.VoltageLevel = 0;
+        gponPhyMedia->Voltage.CurrentVoltage = 0;
         
         gponPhyMedia->Bias.CurrentBias = 0;
         
@@ -203,8 +208,8 @@ void GponMgrDml_SetDefaultGtc(DML_GTC* gponGtcData)
         gponGtcData->CorrectedFecBytes = 0;
         gponGtcData->CorrectedFecCodeWords = 0;
         gponGtcData->UnCorrectedFecCodeWords = 0;
-        gponGtcData->TotalFecCodeWords = 0;
-        gponGtcData->HecErrorCount = 0;
+        gponGtcData->GtcTotalFecCodeWords = 0;
+        gponGtcData->GtcHecErrorCount = 0;
         gponGtcData->PSBdHecErrors = 0;
         gponGtcData->FrameHecErrors = 0;
         gponGtcData->FramesLost = 0;
@@ -224,8 +229,8 @@ void GponMgrDml_SetDefaultPloam(DML_PLOAM* gponPloamData)
         gponPloamData->TxMessageCount = 0;
         gponPloamData->RxMessageCount = 0;
         gponPloamData->MicErrors = 0;
-        gponPloamData->RegistrationTimers.TO1 = 0;
-        gponPloamData->RegistrationTimers.TO2 = 0;
+        gponPloamData->TO1Timer = 0;
+        gponPloamData->TO2Timer = 0;
         gponPloamData->LastFetchedTime = 0;
     }    
 }
@@ -234,8 +239,8 @@ void GponMgrDml_SetDefaultOmci(DML_OMCI* gponOmciData)
 {
     if(gponOmciData != NULL)
     {
-        gponOmciData->RxBaseLineMessageCountValid = 0;
-        gponOmciData->RxExtendedMessageCountValid = 0;
+        gponOmciData->BaselineMessageCount = 0;
+        gponOmciData->ExtendedMessageCount = 0;
         gponOmciData->MicErrors = 0;
         gponOmciData->LastFetchedTime = 0;
     }    
@@ -284,7 +289,7 @@ void GponMgrDml_SetDefaultVeip(DML_VEIP_CTRL_T* gponVeipData)
         DML_VEIP* gponVeip = &(gponVeipData->dml);
         
         gponVeip->uInstanceNumber = 0;
-        gponVeip->MeId = 0;
+        gponVeip->ManagedEntityId = 0;
         gponVeip->AdministrativeState = Lock;
         gponVeip->OperationalState = veip_Unknown;
         memset(gponVeip->InterDomainName, 0, 25);
