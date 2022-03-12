@@ -17,9 +17,7 @@
 # limitations under the License.
 ##########################################################################
 
-AM_CFLAGS = -D_ANSC_LINUX
-AM_CFLAGS += -D_ANSC_USER
-AM_CFLAGS += -D_ANSC_LITTLE_ENDIAN_
+AM_CFLAGS =
 AM_LDFLAGS = -lccsp_common
 
 AM_CPPFLAGS = -Wall -Werror
