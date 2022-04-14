@@ -19,18 +19,14 @@
 
 bin_PROGRAMS = GponManager
 
-AM_CPPFLAGS = -I$(top_srcdir)/hal/include \
-                -I$(top_srcdir)/source/LogComponent \
-                -I$(top_srcdir)/source/TR-181/middle_layer_src \
-                -I$(top_srcdir)/source/TR-181/include
-
-
 GponManager_DEPENDENCIES = \
         $(EXTRA_DEPENDENCIES) \
         ${top_builddir}/source/TR-181/middle_layer_src/libRdkGponManager_middle_layer_src.la
 
-GponManager_CFLAGS = -D_ANSC_LINUX -D_ANSC_USER -D_ANSC_LITTLE_ENDIAN_ -DFEATURE_SUPPORT_RDKLOG $(DBUS_CFLAGS) $(SYSTEMD_CFLAGS)
+GponManager_CPPFLAGS = -I$(top_srcdir)/source/TR-181/middle_layer_src \
+                       -I$(top_srcdir)/source/TR-181/include
+
+GponManager_CFLAGS = -DFEATURE_SUPPORT_RDKLOG $(DBUS_CFLAGS) $(SYSTEMD_CFLAGS)
 GponManager_SOURCES = ssp_action.c ssp_messagebus_interface.c ssp_main.c gponmgr_controller.c gponmgr_link_state_machine.c
 GponManager_LDFLAGS = -lccsp_common -lrdkloggers $(DBUS_LIBS) $(SYSTEMD_LDFLAGS)
-GponManager_LDADD =  $(GponManager_DEPENDENCIES)
-
+GponManager_LDADD = $(GponManager_DEPENDENCIES)
