@@ -16,21 +16,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
+AM_CFLAGS =
 
-AM_CFLAGS = -D_ANSC_LINUX
-AM_CFLAGS += -D_ANSC_USER
-AM_CFLAGS += -D_ANSC_LITTLE_ENDIAN_
-AM_LDFLAGS = -lccsp_common
-
-AM_CPPFLAGS = -Wall -Werror
 ACLOCAL_AMFLAGS = -I m4
-hardware_platform = i686-linux-gnu
 
 noinst_LTLIBRARIES = libRdkGponManager_middle_layer_src.la
-libRdkGponManager_middle_layer_src_la_CPPFLAGS = -I/var/tmp/pc-rdkb/include/dbus-1.0 \
-												 -I$(top_srcdir)/../CcspCommonLibrary/source/ccs
-												 -I$(top_srcdir)/../CcspCommonLibrary/source/ccsp/components/common/MessageBusHelper
-												 -I$(top_srcdir)/source/TR-181/middle_layer_src \
+
+libRdkGponManager_middle_layer_src_la_CPPFLAGS = -I$(top_srcdir)/source/TR-181/middle_layer_src \
                                                  -I$(top_srcdir)/source/TR-181/include \
                                                  -I$(top_srcdir)/source/GponManager
 
