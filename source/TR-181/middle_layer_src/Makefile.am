@@ -36,4 +36,4 @@ libRdkGponManager_middle_layer_src_la_SOURCES = gponmgr_dml_backendmgr.c \
                                                 gponmgr_dml_obj.c \
                                                 gponmgr_dml_plugin_main.c
 
-libRdkGponManager_middle_layer_src_la_LDFLAGS = -lccsp_common -lhal_platform -ljson_hal_client -ljson-c -lpthread
+libRdkGponManager_middle_layer_src_la_LDFLAGS = -lccsp_common -lsyscfg -lhal_platform -ljson_hal_client -ljson-c -lpthread
