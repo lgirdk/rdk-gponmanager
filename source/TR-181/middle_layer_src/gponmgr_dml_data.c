@@ -311,6 +311,36 @@ void GponMgrDml_SetDefaultTr69(DML_TR69* gponTr69Data)
     }    
 }
 
+void GponMgrDml_SetDefaultServices(DML_SERVICES_CTRL_T* ontServicesData,int index)
+{
+    if(ontServicesData != NULL)
+    {
+        ontServicesData->updated = false;
+        DML_SERVICES* ontServices = &(ontServicesData->dml);
+        ontServices->uInstanceNumber = index;
+        ontServices->Enable = true;
+        ontServices->Status = "Up";
+        memset(ontServices->Name, 0, 64);
+        memset(ontServices->Alias, 0, 64);
+        memset(ontServices->Description, 0, 256);
+        ontServices->IPProvisioningMode = "IPv4";
+    }
+}
+
+void GponMgrDml_SetDefaultOpticalInterface(DML_OPT_INT_CTRL_T* optInterfaceData,int index)
+{
+    if(optInterfaceData != NULL)
+    {
+        optInterfaceData->updated = false;
+        DML_OPT_INT* optInterface = &(optInterfaceData->dml);
+        optInterface->uInstanceNumber = index;
+        optInterface->X_LGI_COM_TransceiverTemp = 0;
+        optInterface->X_LGI_COM_TransceiverVoltage = 0;
+        optInterface->X_LGI_COM_LaserBiasCurrent = 0;
+        optInterface->OpticalSignalLevel = 0;
+        optInterface->TransmitOpticalLevel = 0;
+    }
+}
 
 void GponMgrDml_SetDefaultData(GPON_DML_DATA* pGponData)
 {
@@ -318,6 +348,9 @@ void GponMgrDml_SetDefaultData(GPON_DML_DATA* pGponData)
     
     if(pGponData != NULL)
     {
+        DML_SERVICES_LIST_T *pOntServList = &(pGponData->ont.Services);
+        DML_OPT_INT_LIST_T *pOptIntList = &(pGponData->optical.Interface);
+
         pGponData->gpon.PhysicalMedia.ulQuantity = 0;
         for(idx = 0; idx < GPON_DATA_MAX_PM; idx++)
         {
@@ -343,6 +376,28 @@ void GponMgrDml_SetDefaultData(GPON_DML_DATA* pGponData)
         }
         
         GponMgrDml_SetDefaultTr69(&( pGponData->gpon.Tr69));
+
+        pGponData->ont.Services.ulQuantity = 0;
+        for (idx = 0; idx < ONT_DATA_MAX_SERVICES; idx++)
+        {
+            pOntServList->pdata[idx] = (DML_SERVICES_CTRL_T*) AnscAllocateMemory(sizeof(DML_SERVICES_CTRL_T));
+            if(pOntServList->pdata[idx] != NULL)
+            {
+                GponMgrDml_SetDefaultServices(pOntServList->pdata[idx],idx);
+                pOntServList->ulQuantity++;
+            }
+        }
+
+        pGponData->optical.Interface.ulQuantity = 0;
+        for (idx = 0; idx < (OPT_MAX_INT - 1); idx++)
+        {
+            pOptIntList->pdata[idx] = (DML_OPT_INT_CTRL_T*) AnscAllocateMemory(sizeof(DML_OPT_INT_CTRL_T));
+            if(pOptIntList->pdata[idx] != NULL)
+            {
+                GponMgrDml_SetDefaultOpticalInterface(pOptIntList->pdata[idx],idx);
+                pOptIntList->ulQuantity++;
+            }
+        }
     }
 }
 

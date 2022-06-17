@@ -371,6 +371,30 @@ _DML_TR69
 }
 DML_TR69, *PDML_TR69;
 
+typedef struct
+_DML_SERVICES
+{
+    ULONG              uInstanceNumber;
+    ULONG              IPProvisioningMode;
+    ULONG              Status;
+    CHAR               Name[64];
+    BOOL               Enable;
+    CHAR               Alias[64];
+    CHAR               Description[256];
+}
+DML_SERVICES, *PDML_SERVICES;
+
+typedef struct
+_DML_OPT_INT
+{
+    ULONG              uInstanceNumber;
+    INT                X_LGI_COM_TransceiverTemp;
+    INT                X_LGI_COM_TransceiverVoltage;
+    INT                X_LGI_COM_LaserBiasCurrent;
+    INT                TransmitOpticalLevel;
+    INT                OpticalSignalLevel;
+}
+DML_OPT_INT, *PDML_OPT_INT;
 
 typedef  struct
 _DML_X_RDK_GPON_DEVICE
