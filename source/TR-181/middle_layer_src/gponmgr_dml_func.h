@@ -212,4 +212,44 @@ ULONG Gpontr69_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*
 
 BOOL Gpontr69_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
 
+BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
+
+BOOL OntServ_IsUpdated(ANSC_HANDLE hInsContext);
+
+ULONG OntServ_Synchronize(ANSC_HANDLE hInsContext);
+
+ULONG OntServ_GetEntryCount(ANSC_HANDLE hInsContext);
+
+ANSC_HANDLE OntServ_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNumber);
+
+ULONG OntServ_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* pValue,ULONG* pUlSize );
+
+BOOL OntServ_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong);
+
+BOOL OntServ_GetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL*  pBool);
+
+BOOL OntServ_SetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL  bValue);
+
+BOOL OntServ_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength);
+
+ULONG OntServ_Commit(ANSC_HANDLE hInsContext);
+
+ULONG OntServ_Rollback(ANSC_HANDLE hInsContext);
+
+BOOL OptInter_IsUpdated(ANSC_HANDLE hInsContext);
+
+ULONG OptInter_Synchronize(ANSC_HANDLE hInsContext);
+
+ULONG OptInter_GetEntryCount(ANSC_HANDLE hInsContext);
+
+ANSC_HANDLE OptInter_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNumber);
+
+BOOL OptInter_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
+
+BOOL OptInter_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength);
+
+ULONG OptInter_Commit(ANSC_HANDLE hInsContext);
+
+ULONG OptInter_Rollback(ANSC_HANDLE hInsContext);
+
 #endif
