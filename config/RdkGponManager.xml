@@ -83,7 +83,7 @@
                                 <syntax>uint32/mapped</syntax>
                             </parameter>
                         </parameters>
-                        <objects>                                
+                        <objects>
                                 <object>
                                     <name>RxPower</name>
                                     <objectType>object</objectType>
@@ -356,7 +356,7 @@
                                 <name>RegistrationState</name>
                                 <type>string: O1(0),O2(1),O3(2),O4(3),O5(4),O6(5),O7(6),O8(7),O9(8)</type>
                                 <syntax>uint32/mapped</syntax>
-                            </parameter>                            
+                            </parameter>
                             <parameter>
                                 <name>ActivationCounter</name>
                                 <type>unsignedInt</type>
