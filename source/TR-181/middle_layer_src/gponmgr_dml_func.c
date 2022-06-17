@@ -1656,3 +1656,368 @@ BOOL Gpontr69_GetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG
     return ret;
 }
 
+BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong)
+{
+    BOOL ret = FALSE;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+    if (pGponDmlData != NULL)
+    {
+        DML_PLOAM *pGponPloam = &(pGponDmlData->gpon.Ploam);
+
+        if (strcmp(ParamName, "ConnectionMode") == 0)
+        {
+            *puLong= 1;
+            ret = TRUE;
+        }
+        else if (strcmp(ParamName, "Status") == 0)
+        {
+            if ( GponHal_get_ploam(pGponPloam) == ANSC_STATUS_SUCCESS)
+            {
+                *puLong= pGponPloam->RegistrationState;
+                ret = TRUE;
+            }
+        }
+        else if (strcmp(ParamName, "NetworkStatus") == 0)
+        {
+            *puLong = 0;
+            ret = TRUE;
+        }
+        else if (strcmp(ParamName, "EncryptionStatus") == 0)
+        {
+            *puLong= 3;
+            ret = TRUE;
+        }
+        else if (strcmp(ParamName, "Mode") == 0)
+        {
+            *puLong = 0;
+            ret = TRUE;
+        }
+        else if (strcmp(ParamName, "StandardCompliance") == 0)
+        {
+            *puLong= 1;
+            ret = TRUE;
+        }
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return ret;
+}
+
+BOOL OntServ_IsUpdated(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS ret = ANSC_STATUS_SUCCESS;
+    BOOL bIsUpdated = FALSE;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+    if (pGponDmlData != NULL)
+    {
+        bIsUpdated = TRUE;
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return bIsUpdated;
+}
+
+ULONG OntServ_Synchronize(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+
+    return returnStatus;
+}
+
+ULONG OntServ_GetEntryCount(ANSC_HANDLE hInsContext)
+{
+    ULONG count = 0;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+    if (pGponDmlData != NULL)
+    {
+        count = pGponDmlData->ont.Services.ulQuantity;
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return count;
+}
+
+ANSC_HANDLE OntServ_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNumber)
+{
+    ANSC_HANDLE pDmlEntry = NULL;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+    if (pGponDmlData != NULL)
+    {
+        if(nIndex < pGponDmlData->ont.Services.ulQuantity)
+        {
+            DML_SERVICES_CTRL_T* pOntCtrl = pGponDmlData->ont.Services.pdata[nIndex];
+            if(pOntCtrl != NULL)
+            {
+                *pInsNumber = nIndex + 1;
+                pDmlEntry = (ANSC_HANDLE) pOntCtrl;
+            }
+        }
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return pDmlEntry;
+}
+
+ULONG OntServ_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* pValue,ULONG* pUlSize )
+{
+    DML_SERVICES_CTRL_T *pOntCtrl = (DML_SERVICES_CTRL_T*) hInsContext;
+    ULONG ret = -1;
+    char name[][64] = {"Internet service","VoIP service"};
+    char alias[][64] = {"Internet","VoIP"};
+    char description[][256] = {"The RG provides Internet service for the clients connected to the XGSPON gateway","The RG provides Voice over IP service on the embedded MTA"};
+
+    if(pOntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+        if (pGponDmlData != NULL)
+        {
+            DML_SERVICES* pOntServ = &(pOntCtrl->dml);
+
+            if (strcmp(ParamName, "Name") == 0)
+            {
+                AnscCopyString(pValue, name[pOntServ->uInstanceNumber]);
+                ret = 0;
+            }
+            else if (strcmp(ParamName, "Alias") == 0)
+            {
+                AnscCopyString(pValue, alias[pOntServ->uInstanceNumber]);
+                ret = 0;
+            }
+            else if (strcmp(ParamName, "Description") == 0)
+            {
+                AnscCopyString(pValue, description[pOntServ->uInstanceNumber]);
+                ret = 0;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OntServ_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong)
+{
+    DML_SERVICES_CTRL_T *pOntCtrl = (DML_SERVICES_CTRL_T *) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+        if (pGponDmlData != NULL)
+        {
+            DML_SERVICES* pOntServ = &(pOntCtrl->dml);
+
+            if (strcmp(ParamName, "IPProvisioningMode") == 0)
+            {
+                *puLong = 2;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "Status") == 0)
+            {
+                *puLong = 0;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OntServ_GetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL*  pBool)
+{
+    DML_SERVICES_CTRL_T *pOntCtrl = (DML_SERVICES_CTRL_T *) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+        if (pGponDmlData != NULL)
+        {
+            DML_SERVICES *pOntServ = &(pOntCtrl->dml);
+
+            if (strcmp(ParamName, "Enable") == 0)
+            {
+                *pBool = pOntServ->Enable;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OntServ_SetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL  bValue)
+{
+    DML_SERVICES_CTRL_T *pOntCtrl = (DML_SERVICES_CTRL_T *) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+        if (pGponDmlData != NULL)
+        {
+            DML_SERVICES* pOntServ = &(pOntCtrl->dml);
+
+            if (strcmp(ParamName, "Enable") == 0)
+            {
+                pOntServ->Enable = bValue;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OntServ_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength)
+{
+    return TRUE;
+}
+
+ULONG OntServ_Commit(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+    return returnStatus;
+}
+
+ULONG OntServ_Rollback(ANSC_HANDLE hInsContext)
+{
+    return 0;
+}
+
+BOOL OptInter_IsUpdated(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS ret = ANSC_STATUS_SUCCESS;
+    BOOL        bIsUpdated = FALSE;
+
+    GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
+    if(pGponDmlData != NULL)
+    {
+        bIsUpdated = TRUE;
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return bIsUpdated;
+}
+
+ULONG OptInter_Synchronize(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+
+    return returnStatus;
+}
+
+ULONG OptInter_GetEntryCount(ANSC_HANDLE hInsContext)
+{
+    ULONG count = 0;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+    if (pGponDmlData != NULL)
+    {
+        count = pGponDmlData->optical.Interface.ulQuantity;
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return count;
+}
+
+ANSC_HANDLE OptInter_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNumber)
+{
+    ANSC_HANDLE pDmlEntry = NULL;
+
+    GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+    if (pGponDmlData != NULL)
+    {
+        if(nIndex < pGponDmlData->optical.Interface.ulQuantity)
+        {
+            DML_OPT_INT_CTRL_T *pOptIntCtrl = pGponDmlData->optical.Interface.pdata[nIndex];
+            if (pOptIntCtrl != NULL)
+            {
+                *pInsNumber = nIndex + 1;
+                pDmlEntry = (ANSC_HANDLE) pOptIntCtrl;
+            }
+        }
+
+        GponMgrDml_GetData_release(pGponDmlData);
+    }
+
+    return pDmlEntry;
+}
+
+BOOL OptInter_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt)
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T *) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT *pOptInt = &(pOptIntCtrl->dml);
+
+            if (strcmp(ParamName, "X_LGI-COM_TransceiverTemp") == 0)
+            {
+                *pInt = pOptInt->X_LGI_COM_TransceiverTemp;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "X_LGI-COM_TransceiverVoltage") == 0)
+            {
+                *pInt = pOptInt->X_LGI_COM_TransceiverVoltage;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "X_LGI-COM_LaserBiasCurrent") == 0)
+            {
+                *pInt = pOptInt->X_LGI_COM_LaserBiasCurrent;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "OpticalSignalLevel") == 0)
+            {
+                *pInt = pOptInt->OpticalSignalLevel;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "TransmitOpticalLevel") == 0)
+            {
+                *pInt = pOptInt->TransmitOpticalLevel;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OptInter_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength)
+{
+    return TRUE;
+}
+
+ULONG OptInter_Commit(ANSC_HANDLE hInsContext)
+{
+    ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+
+    return returnStatus;
+}
+
+ULONG OptInter_Rollback(ANSC_HANDLE hInsContext)
+{
+    return 0;
+}
