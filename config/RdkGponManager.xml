@@ -836,5 +836,145 @@
                     </object>
                 </objects>
         </object>
+        <object>
+            <name>X_LGI-COM_ONT</name>
+            <objectType>object</objectType>
+            <functions>
+                <func_GetParamUlongValue>X_LGI_COM_ONT_GetParamUlongValue</func_GetParamUlongValue>
+            </functions>
+            <parameters>
+                <parameter>
+                    <name>ConnectionMode</name>
+                    <type>string: IPOE(0),PPPOE(1)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+                <parameter>
+                    <name>Status</name>
+                    <type>string: Initial state(0),Initial state Off-Sync(1),Initial state Profile learning(2),Serial Number state(3),Ranging state(4),Operation state(5),Operation state/Associated(6),Intermittent LODS state(7),Emergency Stop state(8)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+                <parameter>
+                    <name>NetworkStatus</name>
+                    <type>string: Up(0),Down(1),Error(2)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+                <parameter>
+                    <name>EncryptionStatus</name>
+                    <type>string: Upstream(0),Downstream(1),Bidirectional(2),Off(3)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+                <parameter>
+                    <name>Mode</name>
+                    <type>string: GPON(0),XG-PON(1),XGS-PON(2)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+                <parameter>
+                    <name>StandardCompliance</name>
+                    <type>string: ITU-T G.9807.1(0), ITU-T G.987(1)</type>
+                    <syntax>uint32/mapped</syntax>
+                </parameter>
+            </parameters>
+            <objects>
+                <object>
+                    <name>Services</name>
+                    <objectType>dynamicTable</objectType>
+                    <maxInstance>128</maxInstance>
+                    <functions>
+                        <func_IsUpdated>OntServ_IsUpdated</func_IsUpdated>
+                        <func_Synchronize>OntServ_Synchronize</func_Synchronize>
+                        <func_GetEntryCount>OntServ_GetEntryCount</func_GetEntryCount>
+                        <func_GetEntry>OntServ_GetEntry</func_GetEntry>
+                        <func_GetParamStringValue>OntServ_GetParamStringValue</func_GetParamStringValue>
+                        <func_GetParamUlongValue>OntServ_GetParamUlongValue</func_GetParamUlongValue>
+                        <func_GetParamBoolValue>OntServ_GetParamBoolValue</func_GetParamBoolValue>
+                        <func_SetParamBoolValue>OntServ_SetParamBoolValue</func_SetParamBoolValue>
+                        <func_Validate>OntServ_Validate</func_Validate>
+                        <func_Commit>OntServ_Commit</func_Commit>
+                        <func_Rollback>OntServ_Rollback</func_Rollback>
+                    </functions>
+                    <parameters>
+                        <parameter>
+                            <name>Name</name>
+                            <type>String(64)</type>
+                            <syntax>string</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>Enable</name>
+                            <type>boolean</type>
+                            <syntax>bool</syntax>
+                            <writable>true</writable>
+                        </parameter>
+                        <parameter>
+                            <name>Status</name>
+                            <type>string: Up(0),Down(1),Error(2)</type>
+                            <syntax>uint32/mapped</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>Description</name>
+                            <type>String(256)</type>
+                            <syntax>string</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>Alias</name>
+                            <type>String(64)</type>
+                            <syntax>string</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>IPProvisioningMode</name>
+                            <type>string: IPv4(0),IPv6(1),Dualstack service(2),None(3)</type>
+                            <syntax>uint32/mapped</syntax>
+                        </parameter>
+                    </parameters>
+                </object>
+            </objects>
+        </object>
+        <object>
+            <name>Optical</name>
+            <objectType>object</objectType>
+            <objects>
+                <object>
+                    <name>Interface</name>
+                    <objectType>dynamicTable</objectType>
+                    <maxInstance>128</maxInstance>
+                    <functions>
+                        <func_IsUpdated>OptInter_IsUpdated</func_IsUpdated>
+                        <func_Synchronize>OptInter_Synchronize</func_Synchronize>
+                        <func_GetEntryCount>OptInter_GetEntryCount</func_GetEntryCount>
+                        <func_GetEntry>OptInter_GetEntry</func_GetEntry>
+                        <func_GetParamIntValue>OptInter_GetParamIntValue</func_GetParamIntValue>
+                        <func_Validate>OptInter_Validate</func_Validate>
+                        <func_Commit>OptInter_Commit</func_Commit>
+                        <func_Rollback>OptInter_Rollback</func_Rollback>
+                    </functions>
+                    <parameters>
+                        <parameter>
+                            <name>X_LGI-COM_TransceiverTemp</name>
+                            <type>int[-274:]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>X_LGI-COM_TransceiverVoltage</name>
+                            <type>int</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>X_LGI-COM_LaserBiasCurrent</name>
+                            <type>int</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>TransmitOpticalLevel</name>
+                            <type>int[-65536:65534]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>OpticalSignalLevel</name>
+                            <type>int[-65536:65534]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                    </parameters>
+                </object>
+            </objects>
+        </object>
     </objects>
 </dataModelInfo>
