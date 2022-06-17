@@ -402,6 +402,30 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
 
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpontr69_GetParamStringValue", Gpontr69_GetParamStringValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpontr69_GetParamUlongValue", Gpontr69_GetParamUlongValue);
+
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "X_LGI_COM_ONT_GetParamUlongValue", X_LGI_COM_ONT_GetParamUlongValue);
+
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Synchronize", OntServ_Synchronize);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_IsUpdated", OntServ_IsUpdated);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_GetEntryCount", OntServ_GetEntryCount);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_GetEntry", OntServ_GetEntry);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_GetParamStringValue", OntServ_GetParamStringValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_GetParamUlongValue", OntServ_GetParamUlongValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_GetParamBoolValue", OntServ_GetParamBoolValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_SetParamBoolValue", OntServ_SetParamBoolValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Commit", OntServ_Commit);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Validate", OntServ_Validate);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Rollback", OntServ_Rollback);
+
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Synchronize", OptInter_Synchronize);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_IsUpdated", OptInter_IsUpdated);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetEntryCount", OptInter_GetEntryCount);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetEntry", OptInter_GetEntry);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetParamIntValue", OptInter_GetParamIntValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Commit", OptInter_Commit);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Validate", OptInter_Validate);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Rollback", OptInter_Rollback);
+
     /* Create backend framework */
     g_pBEManager = (PBACKEND_MANAGER_OBJECT)GponMgrDml_BackEndManagerCreate();
 
