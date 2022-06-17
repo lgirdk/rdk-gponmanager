@@ -32,7 +32,9 @@
 #define GPON_DATA_MAX_GEM           32
 #define GPON_DATA_MAX_VEIP          2
 
+#define ONT_DATA_MAX_SERVICES       2
 
+#define OPT_MAX_INT                 2
 
 
 
@@ -104,6 +106,49 @@ _DML_X_RDK_GPON
 }
 DML_X_RDK_GPON;
 
+typedef  struct
+_DML_SERVICES_CTRL_
+{
+    DML_SERVICES    dml;
+    bool            updated;
+}
+DML_SERVICES_CTRL_T;
+
+typedef  struct
+_DML_SERVICES_LIST_
+{
+    UINT                    ulQuantity;
+    DML_SERVICES_CTRL_T*    pdata[ONT_DATA_MAX_SERVICES];
+}
+DML_SERVICES_LIST_T;
+
+typedef struct
+{
+    DML_SERVICES_LIST_T    Services;
+}
+DML_X_LGI_ONT;
+
+typedef  struct
+_DML_OPT_INT_CTRL_
+{
+    DML_OPT_INT     dml;
+    bool            updated;
+}
+DML_OPT_INT_CTRL_T;
+
+typedef  struct
+_DML_OPT_INT_LIST_
+{
+    UINT                    ulQuantity;
+    DML_OPT_INT_CTRL_T*     pdata[OPT_MAX_INT];
+}
+DML_OPT_INT_LIST_T;
+
+typedef struct
+{
+    DML_OPT_INT_LIST_T    Interface;
+}
+DML_OPTICAL;
 
 typedef  struct
 _GPON_DML_DATA_
@@ -114,6 +159,12 @@ _GPON_DML_DATA_
     //GPON data
     DML_X_RDK_GPON          gpon;
     
+    //ONT data
+    DML_X_LGI_ONT           ont;
+
+    //Optical data
+    DML_OPTICAL             optical;
+
     //mutex
     pthread_mutex_t         mDataMutex;         
 }
