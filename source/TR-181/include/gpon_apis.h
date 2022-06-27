@@ -205,6 +205,19 @@ _DML_OPERSTATE_ENUM
 }
 DML_OPERSTATE_ENUM;
 
+typedef enum
+_DML_OPTICALSTATUS_ENUM
+{
+    opt_Up,
+    opt_Down,
+    opt_Unknown,
+    opt_Dormant,
+    opt_NotPresent,
+    opt_LowerLayerDown,
+    opt_Error
+}
+DML_OPTICALSTATUS_ENUM;
+
 typedef  struct
 _DML_PHY_MEDIA
 {
@@ -419,15 +432,41 @@ _DML_SERVICES
 }
 DML_SERVICES, *PDML_SERVICES;
 
+typedef  struct
+_DML_OPT_STATS
+{
+    ULONG                           BytesSent;
+    ULONG                           BytesReceived;
+    ULONG                           PacketsSent;
+    ULONG                           PacketsReceived;
+    ULONG                           ErrorsSent;
+    ULONG                           ErrorsReceived;
+    ULONG                           DiscardPacketsSent;
+    ULONG                           DiscardPacketsReceived;
+}
+DML_OPT_STATS, *PDML_OPT_STATS;
+
 typedef struct
 _DML_OPT_INT
 {
-    ULONG              uInstanceNumber;
-    INT                X_LGI_COM_TransceiverTemp;
-    INT                X_LGI_COM_TransceiverVoltage;
-    INT                X_LGI_COM_LaserBiasCurrent;
-    INT                TransmitOpticalLevel;
-    INT                OpticalSignalLevel;
+    ULONG                               uInstanceNumber;
+    INT                                 X_LGI_COM_TransceiverTemp;
+    INT                                 X_LGI_COM_TransceiverVoltage;
+    INT                                 X_LGI_COM_LaserBiasCurrent;
+    INT                                 TransmitOpticalLevel;
+    INT                                 OpticalSignalLevel;
+    DML_OPTICALSTATUS_ENUM              OptStatus;
+    ULONG                               LastChange;
+    INT                                 LowerOpticalThreshold;
+    INT                                 UpperOpticalThreshold;
+    INT                                 LowerTransmitPowerThreshold;
+    INT                                 UpperTransmitPowerThreshold;
+    BOOL                                Enable;
+    BOOL                                Upstream;
+    CHAR                                Name[64];
+    CHAR                                Alias[64];
+    CHAR                                LowerLayers[256];
+    DML_OPT_STATS                       Stats;
 }
 DML_OPT_INT, *PDML_OPT_INT;
 
