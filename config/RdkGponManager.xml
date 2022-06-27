@@ -941,12 +941,74 @@
                         <func_Synchronize>OptInter_Synchronize</func_Synchronize>
                         <func_GetEntryCount>OptInter_GetEntryCount</func_GetEntryCount>
                         <func_GetEntry>OptInter_GetEntry</func_GetEntry>
+                        <func_GetParamStringValue>OptInter_GetParamStringValue</func_GetParamStringValue>
+                        <func_GetParamUlongValue>OptInter_GetParamUlongValue</func_GetParamUlongValue>
                         <func_GetParamIntValue>OptInter_GetParamIntValue</func_GetParamIntValue>
+                        <func_GetParamBoolValue>OptInter_GetParamBoolValue</func_GetParamBoolValue>
+                        <func_SetParamBoolValue>OptInter_SetParamBoolValue</func_SetParamBoolValue>
+                        <func_SetParamStringValue>OptInter_SetParamStringValue</func_SetParamStringValue>
                         <func_Validate>OptInter_Validate</func_Validate>
                         <func_Commit>OptInter_Commit</func_Commit>
                         <func_Rollback>OptInter_Rollback</func_Rollback>
                     </functions>
                     <parameters>
+                        <parameter>
+                            <name>Enable</name>
+                            <type>boolean</type>
+                            <syntax>bool</syntax>
+                            <writable>true</writable>
+                        </parameter>
+                        <parameter>
+                            <name>Status</name>
+                            <type>string: Up(0),Down(1),Unknown(2),Dormant(3),NotPresent(4),LowerLayerDown(5),Error(6)</type>
+                            <syntax>uint32/mapped</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>Alias</name>
+                            <type>String(64)</type>
+                            <syntax>string</syntax>
+                            <writable>true</writable>
+                        </parameter>
+                        <parameter>
+                            <name>Name</name>
+                            <type>String(64)</type>
+                            <syntax>string</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>LastChange</name>
+                            <type>unsignedInt</type>
+                            <syntax>uint32</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>LowerLayers</name>
+                            <type>String(1024)</type>
+                            <syntax>string</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>Upstream</name>
+                            <type>boolean</type>
+                            <syntax>bool</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>LowerOpticalThreshold</name>
+                            <type>int[-127000:0]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>UpperOpticalThreshold</name>
+                            <type>int[-127000:0]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>LowerTransmitPowerThreshold</name>
+                            <type>int[-63500:63500]</type>
+                            <syntax>int</syntax>
+                        </parameter>
+                        <parameter>
+                            <name>UpperTransmitPowerThreshold</name>
+                            <type>int[-63500:63500]</type>
+                            <syntax>int</syntax>
+                        </parameter>
                         <parameter>
                             <name>X_LGI-COM_TransceiverTemp</name>
                             <type>int[-274:]</type>
@@ -973,6 +1035,65 @@
                             <syntax>int</syntax>
                         </parameter>
                     </parameters>
+                    <objects>
+                        <object>
+                            <name>Stats</name>
+                            <objectType>object</objectType>
+                            <functions>
+                                <func_GetParamUlongValue>OptStats_GetParamUlongValue</func_GetParamUlongValue>
+                            </functions>
+                            <parameters>
+                                <parameter>
+                                    <name>BytesSent</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>BytesReceived</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>PacketsSent</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>PacketsReceived</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>ErrorsSent</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>ErrorsReceived</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>DiscardPacketsSent</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                                <parameter>
+                                    <name>DiscardPacketsReceived</name>
+                                    <type>unsignedInt</type>
+                                    <syntax>uint32</syntax>
+                                    <notify>off</notify>
+                                </parameter>
+                            </parameters>
+                        </object>
+                    </objects>
                 </object>
             </objects>
         </object>
