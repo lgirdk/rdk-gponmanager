@@ -234,7 +234,19 @@ ULONG OptInter_GetEntryCount(ANSC_HANDLE hInsContext);
 
 ANSC_HANDLE OptInter_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNumber);
 
+BOOL OptInter_GetParamUlongValue (ANSC_HANDLE hInsContext, char *ParamName, ULONG *puLong);
+
+ULONG OptInter_GetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize);
+
 BOOL OptInter_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt);
+
+BOOL OptInter_GetParamBoolValue (ANSC_HANDLE hInsContext, char *ParamName, BOOL *pBool);
+
+BOOL OptInter_SetParamBoolValue (ANSC_HANDLE hInsContext, char *ParamName, BOOL bValue);
+
+BOOL OptInter_SetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, char *pValue);
+
+BOOL OptStats_GetParamUlongValue (ANSC_HANDLE hInsContext, char *ParamName, ULONG *puLong);
 
 BOOL OptInter_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puLength);
 

@@ -414,7 +414,13 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_IsUpdated", OptInter_IsUpdated);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetEntryCount", OptInter_GetEntryCount);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetEntry", OptInter_GetEntry);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetParamUlongValue", OptInter_GetParamUlongValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetParamStringValue", OptInter_GetParamStringValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetParamIntValue", OptInter_GetParamIntValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetParamBoolValue", OptInter_GetParamBoolValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_SetParamBoolValue", OptInter_SetParamBoolValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_SetParamStringValue", OptInter_SetParamStringValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptStats_GetParamUlongValue", OptStats_GetParamUlongValue);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Commit", OptInter_Commit);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Validate", OptInter_Validate);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Rollback", OptInter_Rollback);

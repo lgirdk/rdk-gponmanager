@@ -339,6 +339,26 @@ void GponMgrDml_SetDefaultOpticalInterface(DML_OPT_INT_CTRL_T* optInterfaceData,
         optInterface->X_LGI_COM_LaserBiasCurrent = 0;
         optInterface->OpticalSignalLevel = 0;
         optInterface->TransmitOpticalLevel = 0;
+        optInterface->Enable = true;
+        optInterface->OptStatus = opt_Unknown;
+        strcpy(optInterface->Name, "");
+        strcpy(optInterface->Alias, "Interface");
+        strcpy(optInterface->LowerLayers, "");
+        optInterface->LastChange = 0;
+        optInterface->Upstream = true;
+        optInterface->LowerOpticalThreshold = 0;
+        optInterface->UpperOpticalThreshold = 0;
+        optInterface->LowerTransmitPowerThreshold = 0;
+        optInterface->UpperTransmitPowerThreshold = 0;
+
+        optInterface->Stats.BytesSent = 0;
+        optInterface->Stats.BytesReceived = 0;
+        optInterface->Stats.PacketsSent = 0;
+        optInterface->Stats.PacketsReceived = 0;
+        optInterface->Stats.ErrorsSent = 0;
+        optInterface->Stats.ErrorsReceived = 0;
+        optInterface->Stats.DiscardPacketsSent = 0;
+        optInterface->Stats.DiscardPacketsReceived = 0;
     }
 }
 
