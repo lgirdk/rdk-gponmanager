@@ -2105,6 +2105,61 @@ ANSC_HANDLE OptInter_GetEntry(ANSC_HANDLE hInsContext,ULONG nIndex,ULONG* pInsNu
     return pDmlEntry;
 }
 
+ULONG OptInter_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* pValue,ULONG* pUlSize )
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+    ULONG ret = -1;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+
+            if (strcmp(ParamName, "Name") == 0)
+            {
+                AnscCopyString(pValue, pOptInt->Name);
+                ret = 0;                                                                    
+            }
+            else if (strcmp(ParamName, "Alias") == 0)
+            {
+                AnscCopyString(pValue, pOptInt->Alias);
+                ret = 0;
+            }
+            else if (strcmp(ParamName, "LowerLayers") == 0)
+            {
+                AnscCopyString(pValue, pOptInt->LowerLayers);
+                ret = 0;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OptInter_SetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* pValue)                                            
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+
+    if (strcmp(ParamName, "Alias") == 0)
+    {
+        DML_OPT_INT *pOptInt = &(pOptIntCtrl->dml);
+
+        if (strcmp(pOptInt->Alias, pValue) != 0)
+        {
+            strcpy(pOptInt->Alias, pValue);
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 BOOL OptInter_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt)
 {
     DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T *) hInsContext;
@@ -2142,11 +2197,179 @@ BOOL OptInter_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt
                 *pInt = pOptInt->TransmitOpticalLevel;
                 ret = TRUE;
             }
+            else if (strcmp(ParamName, "LowerOpticalThreshold") == 0)
+            {
+                *pInt = pOptInt->LowerOpticalThreshold;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "UpperOpticalThreshold") == 0)
+            {
+                *pInt = pOptInt->UpperOpticalThreshold;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "LowerTransmitPowerThreshold") == 0)
+            {
+                *pInt = pOptInt->LowerTransmitPowerThreshold;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "UpperTransmitPowerThreshold") == 0)
+            {
+                *pInt = pOptInt->UpperTransmitPowerThreshold;
+                ret = TRUE;
+            }
 
             GponMgrDml_GetData_release(pGponDmlData);
         }
     }
 
+    return ret;
+}
+
+BOOL OptInter_GetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL*  pBool)
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+
+            if (strcmp(ParamName, "Enable") == 0)
+            {
+                *pBool = pOptInt->Enable;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "Upstream") == 0)
+            {
+                *pBool = pOptInt->Upstream;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OptInter_SetParamBoolValue ( ANSC_HANDLE hInsContext, char*  ParamName, BOOL  bValue)
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+
+            if (strcmp(ParamName, "Enable") == 0)
+            {
+                pOptInt->Enable = bValue;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OptInter_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* puLong)
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+
+            if (strcmp(ParamName, "LastChange") == 0)
+            {
+                *puLong = pOptInt->LastChange;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "Status") == 0)
+            {
+                *puLong = pOptInt->OptStatus;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
+
+    return ret;
+}
+
+BOOL OptStats_GetParamUlongValue (ANSC_HANDLE hInsContext, char* ParamName, ULONG* puLong)
+{
+    DML_OPT_INT_CTRL_T *pOptIntCtrl = (DML_OPT_INT_CTRL_T*) hInsContext;
+    BOOL ret = FALSE;
+
+    if (pOptIntCtrl != NULL)
+    {
+        GPON_DML_DATA *pGponDmlData = GponMgrDml_GetData_locked();
+
+        if (pGponDmlData != NULL)
+        {
+            DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+            
+            if (strcmp(ParamName, "BytesSent") == 0)
+            {
+                *puLong = pOptInt->Stats.BytesSent;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "BytesReceived") == 0)
+            {
+                *puLong = pOptInt->Stats.BytesReceived;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "PacketsSent") == 0)
+            {
+                *puLong = pOptInt->Stats.PacketsSent;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "PacketsReceived") == 0)
+            {
+                *puLong = pOptInt->Stats.PacketsReceived;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "ErrorsSent") == 0)
+            {
+                *puLong = pOptInt->Stats.ErrorsSent;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "ErrorsReceived") == 0)
+            {
+                *puLong = pOptInt->Stats.ErrorsReceived;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "DiscardPacketsSent") == 0)
+            {
+                *puLong = pOptInt->Stats.DiscardPacketsSent;
+                ret = TRUE;
+            }
+            else if (strcmp(ParamName, "DiscardPacketsReceived") == 0)
+            {
+                *puLong = pOptInt->Stats.DiscardPacketsReceived;
+                ret = TRUE;
+            }
+
+            GponMgrDml_GetData_release(pGponDmlData);
+        }
+    }
     return ret;
 }
 
