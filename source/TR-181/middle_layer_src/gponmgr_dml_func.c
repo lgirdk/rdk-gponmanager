@@ -1668,7 +1668,8 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
 
         if (strcmp(ParamName, "ConnectionMode") == 0)
         {
-            *puLong= 1;
+            /* Supports only IPoE, may be changed in the future */
+            *puLong= 0;
             ret = TRUE;
         }
         else if (strcmp(ParamName, "Status") == 0)
@@ -1681,7 +1682,29 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
         }
         else if (strcmp(ParamName, "NetworkStatus") == 0)
         {
-            *puLong = 0;
+            char veip_state[16];
+            FILE *f = fopen("/sys/class/net/veip0/operstate", "r");
+
+            if (f != NULL)
+            {
+                if (fgets(veip_state, 16, f) != NULL)
+                {
+                    if (strncmp(veip_state, "up", 2) == 0)
+                        *puLong = 0;
+                    else if (strncmp(veip_state, "down", 4) == 0)
+                        *puLong = 1;
+                    else
+                    {
+                        /* Mark all the rest states as Error */
+                        AnscTraceError(("Entered NetworkStatus Error Condition\n"));
+                        *puLong = 2;
+                    }
+                }
+                fclose(f);
+            }
+            else
+                *puLong = 2;
+
             ret = TRUE;
         }
         else if (strcmp(ParamName, "EncryptionStatus") == 0)
@@ -1691,12 +1714,38 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
         }
         else if (strcmp(ParamName, "Mode") == 0)
         {
-            *puLong = 0;
-            ret = TRUE;
+            if (pGponDmlData->gpon.PhysicalMedia.ulQuantity > 0)
+            {
+                DML_PHY_MEDIA_CTRL_T *pGponData = pGponDmlData->gpon.PhysicalMedia.pdata[0];
+                if (pGponData != NULL)
+                {
+                    *puLong = pGponData->dml.PonMode;
+                    ret = TRUE;
+                }
+            }
         }
         else if (strcmp(ParamName, "StandardCompliance") == 0)
         {
-            *puLong= 1;
+            char rdpa_wan_type[16];
+            FILE *f = popen("scratchpadctl dump RdpaWanType", "r");
+
+            if (f != NULL)
+            {
+                if (fgets(rdpa_wan_type, 16, f) != NULL)
+                {
+                    if (strncmp(rdpa_wan_type, "XGS", 3) == 0)
+                    {
+                        *puLong = 0;
+                    }
+                    else if (strncmp(rdpa_wan_type, "XGPON1", 6) == 0)
+                    {
+                        *puLong = 1;
+                    }
+                    else
+                        AnscTraceError(("Failed to get StandardCompliance: Unknown RdpaWanType!\n"));
+                }
+                pclose(f);
+            }
             ret = TRUE;
         }
 
