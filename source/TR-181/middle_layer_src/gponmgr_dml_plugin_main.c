@@ -432,6 +432,8 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Validate", OptInter_Validate);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Rollback", OptInter_Rollback);
 
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "DeviceInfo_GetParamStringValue", DeviceInfo_GetParamStringValue);
+
     /* Create backend framework */
     g_pBEManager = (PBACKEND_MANAGER_OBJECT)GponMgrDml_BackEndManagerCreate();
 
