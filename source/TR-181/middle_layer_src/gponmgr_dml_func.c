@@ -2378,3 +2378,54 @@ ULONG OptInter_Rollback(ANSC_HANDLE hInsContext)
 {
     return 0;
 }
+
+ULONG DeviceInfo_GetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize)
+{
+    ULONG result = 0;
+    GPON_DML_DATA *pGponDmlData;
+
+    pGponDmlData = GponMgrDml_GetData_locked();
+
+    if (pGponDmlData == NULL)
+    {
+        return -1;
+    }
+
+    if (strcmp(ParamName, "X_LGI-COM_ONU_MAC") == 0)
+    {
+        if (*pUlSize <= 18)
+        {
+            *pUlSize = 18 + 1;
+            result = 1;
+        }
+        else
+        {
+            FILE *fp;
+            char *sysfile = "/sys/class/net/veip0/address";
+
+            /*
+               Note that the /sys file contains a trailing new line after the MAC
+               address, but since we use fgets() with a size limit of 18 and fgets()
+               ensures that the last character in the read buffer is always a nul,
+               the trailing new line will not be read.
+            */
+
+            fp = fopen(sysfile, "r");
+
+            if ((fp == NULL) || (fgets(pValue, 18, fp) == NULL))
+            {
+                result = -1;
+            }
+
+            if (fp)
+            {
+                fclose(fp);
+            }
+        }
+    }
+
+    GponMgrDml_GetData_release(pGponDmlData);
+
+    return result;
+}
+ 
