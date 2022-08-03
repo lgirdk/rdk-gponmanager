@@ -1097,5 +1097,19 @@
                 </object>
             </objects>
         </object>
+        <object>
+            <name>DeviceInfo</name>
+            <objectType>object</objectType>
+            <functions>
+                <func_GetParamStringValue>DeviceInfo_GetParamStringValue</func_GetParamStringValue>
+            </functions>
+            <parameters>
+                <parameter>
+                    <name>X_LGI-COM_ONU_MAC</name>
+                    <type>String(256)</type>
+                    <syntax>string</syntax>
+                </parameter>
+            </parameters>
+        </object>
     </objects>
 </dataModelInfo>
