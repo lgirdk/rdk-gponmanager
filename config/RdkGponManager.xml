@@ -54,7 +54,7 @@
                             </parameter>
                             <parameter>
                                 <name>PonMode</name>
-                                <type>string: GPON(0),XG-PON(1),NG-PON2(2),XGS-PON2(3)</type>
+                                <type>string: GPON(0),XG-PON(1),NG-PON2(2),XGS-PON(3)</type>
                                 <syntax>uint32/mapped</syntax>
                             </parameter>
                             <parameter>
