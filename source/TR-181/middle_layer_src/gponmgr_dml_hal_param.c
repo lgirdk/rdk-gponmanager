@@ -199,26 +199,26 @@ ANSC_STATUS Map_hal_dml_pm(DML_PHY_MEDIA_LIST_T* gponPhyList, char* ParamName, c
     }
     else if( strstr(ParamName, "PonMode"))
     {
-        //GPON(0),XGPON(1),NGPON2(2),XGPON2(3)
-        if(strstr(pValue,"XGPON"))
+        //GPON(0),XG-PON(1),NG-PON2(2),XGS-PON(3)
+        if(strstr(pValue,"GPON"))
         {
             pPhyMedia->PonMode = GPON;
             retStatus = ANSC_STATUS_SUCCESS;
         }
-        else if(strstr(pValue,"XGPON"))
+        else if(strstr(pValue,"XG"))
         {
-            if (strstr(pValue,"XGPON2"))
+            if (strstr(pValue,"XGS-PON"))
             {
                 pPhyMedia->PonMode = XGPON2;
-            retStatus = ANSC_STATUS_SUCCESS;
+                retStatus = ANSC_STATUS_SUCCESS;
             }
             else
             {
                 pPhyMedia->PonMode = XGPON;
-            retStatus = ANSC_STATUS_SUCCESS;
+                retStatus = ANSC_STATUS_SUCCESS;
             }
         }
-        else if (strstr(pValue,"NGPON2"))
+        else if (strstr(pValue,"NG-PON2"))
         {
             pPhyMedia->PonMode = NGPON2;
             retStatus = ANSC_STATUS_SUCCESS;
