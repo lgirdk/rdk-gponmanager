@@ -254,4 +254,6 @@ ULONG OptInter_Commit(ANSC_HANDLE hInsContext);
 
 ULONG OptInter_Rollback(ANSC_HANDLE hInsContext);
 
+ULONG DeviceInfo_GetParamStringValue(ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize);
+
 #endif
