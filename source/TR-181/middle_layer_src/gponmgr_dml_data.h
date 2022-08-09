@@ -174,6 +174,7 @@ GPON_DML_DATA;
 
 GPON_DML_DATA* GponMgrDml_GetData_locked(void);
 void GponMgrDml_GetData_release(GPON_DML_DATA* pDmlData);
+void GponMgrDml_SetServicesEnable(DML_SERVICES *pOntServ);
 
 
 GPON_DML_DATA* GponMgrDml_GetData(void);

@@ -41,6 +41,7 @@
 #include "gponmgr_dml_plugin_main.h"
 #include "gponmgr_dml_obj.h"
 #include "gponmgr_dml_hal.h"
+#include "gponmgr_dml_data.h"
 
 #if     CFG_USE_CCSP_SYSLOG
     #include <ccsp_syslog.h>
@@ -2250,6 +2251,12 @@ BOOL OntServ_Validate (ANSC_HANDLE hInsContext,char* pReturnParamName,ULONG* puL
 ULONG OntServ_Commit(ANSC_HANDLE hInsContext)
 {
     ANSC_STATUS returnStatus = ANSC_STATUS_SUCCESS;
+
+    DML_SERVICES_CTRL_T *pOntCtrl = (DML_SERVICES_CTRL_T *) hInsContext;
+    DML_SERVICES *pOntServ = &(pOntCtrl->dml);
+
+    GponMgrDml_SetServicesEnable(pOntServ);
+
     return returnStatus;
 }
 
