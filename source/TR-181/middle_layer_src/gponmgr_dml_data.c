@@ -17,6 +17,7 @@
  * limitations under the License.
 */
 
+#include <syscfg/syscfg.h>
 
 #include "gponmgr_dml_data.h"
 
@@ -315,15 +316,37 @@ void GponMgrDml_SetDefaultServices(DML_SERVICES_CTRL_T* ontServicesData,int inde
 {
     if(ontServicesData != NULL)
     {
+        char buf[8];
+
         ontServicesData->updated = false;
         DML_SERVICES* ontServices = &(ontServicesData->dml);
         ontServices->uInstanceNumber = index;
-        ontServices->Enable = true;
         ontServices->Status = "Up";
         memset(ontServices->Name, 0, 64);
         memset(ontServices->Alias, 0, 64);
         memset(ontServices->Description, 0, 256);
         ontServices->IPProvisioningMode = "IPv4";
+
+        if ((ontServices->uInstanceNumber == 0) &&
+            (syscfg_get(NULL, "internet_service_enable", buf, sizeof(buf)) == 0) &&
+            (strcmp(buf, "0") == 0))
+        {
+            ontServices->Enable = FALSE;
+        }
+        else
+        {
+            ontServices->Enable = TRUE;
+        }
+    }
+}
+
+void GponMgrDml_SetServicesEnable(DML_SERVICES *pOntServ)
+{
+    if (pOntServ->uInstanceNumber == 0)
+    {
+        syscfg_set_commit(NULL, "internet_service_enable", pOntServ->Enable ? "1" : "0");
+
+        system("sysevent set firewall-restart");
     }
 }
 
