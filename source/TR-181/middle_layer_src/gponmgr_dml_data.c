@@ -18,6 +18,7 @@
 */
 
 #include <syscfg/syscfg.h>
+#include <ifaddrs.h>
 
 #include "gponmgr_dml_data.h"
 
@@ -372,6 +373,14 @@ void GponMgrDml_SetDefaultServices(DML_SERVICES_CTRL_T* ontServicesData,int inde
     }
 }
 
+static void GponMgrDml_SetDefaultOntMgmtService(PDML_MGMT_SERVICE pOntMgmtService)
+{
+    if(pOntMgmtService != NULL)
+    {
+        pOntMgmtService->IPProvisioningMode = 0;
+    }
+}
+
 void GponMgrDml_SetServicesEnable(DML_SERVICES *pOntServ)
 {
     if (pOntServ->uInstanceNumber == 0)
@@ -437,6 +446,8 @@ void GponMgrDml_SetDefaultData(GPON_DML_DATA* pGponData)
         GponMgrDml_SetDefaultPloam(&( pGponData->gpon.Ploam));
         
         GponMgrDml_SetDefaultOmci(&( pGponData->gpon.Omci));
+
+        GponMgrDml_SetDefaultOntMgmtService(&(pGponData->ont.OntMgmtService));
         
         pGponData->gpon.Gem.ulQuantity = 0;
         for(idx = 0; idx < GPON_DATA_MAX_GEM; idx++)
@@ -577,3 +588,88 @@ ANSC_STATUS GponMgrDml_addVeip(DML_VEIP_LIST_T* gponVeipList, int veip_index)
     return result; 
 }
 
+
+/*******************************************************************************************
+
+    prototype:
+
+        void
+        Get_IPProvisioningMode
+        (
+            ULONG* puLong
+        )
+
+    description:
+
+        This function is called to retrieve the IP provisioning mode in management interface.
+        IPProvisioningMode: Error(0), IPv4(1), IPv6(2), Dualstack(3).
+
+    argument:
+
+        ULONG*            puLong
+            The buffer of ULONG value (IPProvisioningMode);
+
+*****************************************************************************************/
+void Get_IPProvisioningMode(ULONG* puLong)
+{
+    char buffer[8];
+    ULONG hasIPv4 = 0, hasIPv6 = 0;
+    struct ifaddrs *ifaddr, *ifa;
+
+    //Initialize to 0 - Error
+    *puLong = 0;
+
+    if((getifaddrs(&ifaddr) == 0) && (syscfg_get(NULL, "last_erouter_mode", buffer, sizeof(buffer)) == 0))
+    {
+        for(ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+        {
+            if(ifa->ifa_addr == NULL)
+            {
+                continue;
+            }
+
+            if(strcmp(ifa->ifa_name, "erouter0") == 0)
+            {
+                if(ifa->ifa_addr->sa_family == AF_INET)
+                {
+                    hasIPv4 = 1;
+                }
+                else if(ifa->ifa_addr->sa_family == AF_INET6)
+                {
+                    struct sockaddr_in6 *sa_in6 = (struct sockaddr_in6*) ifa->ifa_addr;
+                    struct in6_addr i_a = sa_in6->sin6_addr;
+
+                    if(IN6_IS_ADDR_LINKLOCAL(&i_a))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        hasIPv6 = 1;
+                    }
+                }
+            }
+        }
+
+        /*
+            Check if the eRouter interface is provisioned according to the erouter_mode in syscfg and return
+            IPProvisioningMode as IPv4, IPv6 and Dualstack respectively. If it is not provisioned correctly
+            return Error(0).
+        */
+
+        if((strcmp(buffer, "1") == 0) && (hasIPv4 == 1) && (hasIPv6 == 0))
+        {
+            *puLong = 1;
+        }
+        else if((strcmp(buffer, "2") == 0) && (hasIPv4 == 0) && (hasIPv6 == 1))
+        {
+            *puLong = 2;
+        }
+        else if((strcmp(buffer, "3") == 0) && (hasIPv4 == 1) && (hasIPv6 == 1))
+        {
+            *puLong = 3;
+        }
+    }
+
+    freeifaddrs(ifaddr);
+}
