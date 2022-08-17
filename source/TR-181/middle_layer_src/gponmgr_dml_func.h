@@ -236,6 +236,8 @@ ULONG OntServ_Commit(ANSC_HANDLE hInsContext);
 
 ULONG OntServ_Rollback(ANSC_HANDLE hInsContext);
 
+BOOL OntMgmtService_GetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG* puLong);
+
 BOOL OptInter_IsUpdated(ANSC_HANDLE hInsContext);
 
 ULONG OptInter_Synchronize(ANSC_HANDLE hInsContext);
