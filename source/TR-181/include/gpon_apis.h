@@ -397,6 +397,13 @@ _DML_SERVICES
 }
 DML_SERVICES, *PDML_SERVICES;
 
+typedef struct
+_DML_MGMT_SERVICE
+{
+    ULONG       IPProvisioningMode;
+}
+DML_MGMT_SERVICE, *PDML_MGMT_SERVICE;
+
 typedef  struct
 _DML_OPT_STATS
 {
