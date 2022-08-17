@@ -849,6 +849,21 @@
                         </parameter>
                     </parameters>
                 </object>
+                <object>
+                    <name>MgmtService</name>
+                    <objectType>object</objectType>
+                    <functions>
+                        <func_GetParamUlongValue>OntMgmtService_GetParamUlongValue</func_GetParamUlongValue>
+                    </functions>
+                    <parameters>
+                        <parameter>
+                            <name>IPProvisioningMode</name>
+                            <type>string: Error(0),IPv4(1),IPv6(2),Dualstack(3)</type>
+                            <syntax>uint32/mapped</syntax>
+                            <writable>false</writable>
+                        </parameter>
+                    </parameters>
+                </object>
             </objects>
         </object>
         <object>

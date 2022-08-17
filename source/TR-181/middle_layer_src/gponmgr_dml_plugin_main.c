@@ -410,6 +410,8 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Validate", OntServ_Validate);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntServ_Rollback", OntServ_Rollback);
 
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OntMgmtService_GetParamUlongValue", OntMgmtService_GetParamUlongValue);
+
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Synchronize", OptInter_Synchronize);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_IsUpdated", OptInter_IsUpdated);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_GetEntryCount", OptInter_GetEntryCount);

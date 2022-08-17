@@ -2041,6 +2041,19 @@ ULONG OntServ_Rollback(ANSC_HANDLE hInsContext)
     return 0;
 }
 
+BOOL OntMgmtService_GetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG* puLong)
+{
+    BOOL return_status = FALSE;
+
+    if(strcmp(ParamName, "IPProvisioningMode") == 0)
+    {
+        Get_IPProvisioningMode(puLong);
+        return_status = TRUE;
+    }
+
+    return return_status;
+}
+
 BOOL OptInter_IsUpdated(ANSC_HANDLE hInsContext)
 {
     ANSC_STATUS ret = ANSC_STATUS_SUCCESS;
