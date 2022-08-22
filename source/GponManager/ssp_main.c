@@ -241,12 +241,10 @@ int main(int argc, char* argv[])
     BOOL                            bRunAsDaemon       = TRUE;
     int                             cmdChar            = 0;
     int                             idx                = 0;
-    char                            cmd[1024]          = {0};
     FILE                           *fd                 = NULL;
 
     char *subSys            = NULL;
     DmErr_t    err;
-
 
     for (idx = 1; idx < argc; idx++)
     {
@@ -274,12 +272,9 @@ int main(int argc, char* argv[])
         CcspTraceWarning(("Create /var/tmp/gponmanager.pid error. \n"));
         return 1;
     }
-    else
-    {
-        sprintf(cmd, "%d", getpid());
-        fputs(cmd, fd);
-        fclose(fd);
-    }
+
+    fprintf(fd, "%d", getpid());
+    fclose(fd);
 
 #ifdef INCLUDE_BREAKPAD
 //    breakpad_ExceptionHandler();
