@@ -2062,7 +2062,11 @@ BOOL OptInter_IsUpdated(ANSC_HANDLE hInsContext)
     GPON_DML_DATA* pGponDmlData = GponMgrDml_GetData_locked();
     if(pGponDmlData != NULL)
     {
-        bIsUpdated = TRUE;
+        ret = GponHal_get_pm(&(pGponDmlData->gpon.PhysicalMedia));
+        if(ret == ANSC_STATUS_SUCCESS)
+        {
+            bIsUpdated = TRUE;
+        }
 
         GponMgrDml_GetData_release(pGponDmlData);
     }
