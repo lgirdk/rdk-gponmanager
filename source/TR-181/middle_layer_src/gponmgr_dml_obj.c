@@ -41,6 +41,7 @@
 #include "gponmgr_dml_hal.h"
 #include "gponmgr_dml_data.h"
 #include "gponmgr_dml_internal.h"
+#include "platform_hal.h"
 
 extern void * g_pDslhDmlAgent;
 
@@ -128,6 +129,25 @@ ANSC_STATUS GponMgrDml_Initialize ( ANSC_HANDLE hThisObject )
     {
         return returnStatus;
     }
+
+#ifdef _LG_MV3_
+
+    char modelName[16];
+
+    if (platform_hal_GetModelName(modelName) == RETURN_OK)
+    {
+        /*
+           F5685LGB : BOSA
+           F5685LGE : EthWAN
+        */
+        if (strcmp(modelName, "F5685LGE") == 0)
+        {
+            /* EthWAN units: Abort early (gponmanager only needs to support a dummy data model) */
+            return ANSC_STATUS_SUCCESS;
+        }
+    }
+
+#endif
 
     //Wait HAL initilisation
     returnStatus = GponHal_Init();
