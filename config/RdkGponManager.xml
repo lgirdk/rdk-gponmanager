@@ -921,7 +921,7 @@
                         </parameter>
                         <parameter>
                             <name>IPProvisioningMode</name>
-                            <type>string: IPv4(0),IPv6(1),Dualstack service(2),None(3)</type>
+                            <type>string: IPv4(0),IPv6(1),Dualstack(2),None(3)</type>
                             <syntax>uint32/mapped</syntax>
                         </parameter>
                     </parameters>
