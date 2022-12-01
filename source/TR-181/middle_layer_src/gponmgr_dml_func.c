@@ -2358,11 +2358,19 @@ ULONG OptInter_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char*
         if (pGponDmlData != NULL)
         {
             DML_OPT_INT* pOptInt = &(pOptIntCtrl->dml);
+            DML_VEIP* pGponVeip = &(pGponDmlData->gpon.Veip.pdata[0]->dml);
 
             if (strcmp(ParamName, "Name") == 0)
             {
-                AnscCopyString(pValue, pOptInt->Name);
-                ret = 0;                                                                    
+                if (pGponVeip != NULL)
+                {
+                    AnscCopyString(pValue, pGponVeip->InterfaceName);
+                }
+                else
+                {
+                    AnscCopyString(pValue, "Unknown");
+                } 
+                ret = 0;
             }
             else if (strcmp(ParamName, "Alias") == 0)
             {
@@ -2543,8 +2551,55 @@ BOOL OptInter_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG*
             }
             else if (strcmp(ParamName, "Status") == 0)
             {
-                *puLong = pOptInt->OptStatus;
+                DML_VEIP* pGponVeip = &(pGponDmlData->gpon.Veip.pdata[0]->dml);
+
+                char veip_state[16];
+                char buf[64];
+                char* ptr = NULL;
+                *puLong = 6;
                 ret = TRUE;
+
+                if (pGponVeip != NULL)
+                {
+                    sprintf(buf, "/sys/class/net/%s/operstate", pGponVeip->InterfaceName);			
+                    FILE *fp = fopen(buf, "r");
+
+                    if (fp)
+                    {
+                        if (fgets(veip_state, sizeof(veip_state), fp) != NULL)
+                        {
+                            ptr = strchr(veip_state, '\n');
+                            if (ptr != NULL)
+                                *ptr= '\0';
+
+                            if (strcasecmp(veip_state, "Up") == 0)
+                            {  
+                                *puLong = 0;
+                            }
+                            else if (strcasecmp(veip_state, "Down") == 0)
+                            {
+                                *puLong = 1;
+                            }
+                            else if (strcasecmp(veip_state, "Unknown") == 0)
+                            {
+                                *puLong = 2;
+                            }
+                            else if (strcasecmp(veip_state, "Dormant") == 0)
+                            {
+                                *puLong = 3;
+                            }
+                            else if (strcasecmp(veip_state, "NotPresent") == 0)
+                            {
+                                *puLong = 4;
+                            }
+                            else if (strcasecmp(veip_state, "LowerLayerDown") == 0)
+                            {
+                                *puLong = 5;
+                            }
+                        }
+                        fclose(fp);
+                    }
+                }
             }
 
             GponMgrDml_GetData_release(pGponDmlData);
