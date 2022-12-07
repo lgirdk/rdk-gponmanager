@@ -1699,8 +1699,12 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
                     *puLong = 0;
                     break;
                 }
-                ret = TRUE;
             }
+            else
+            {
+                *puLong = 0;
+            }		
+            ret = TRUE;	    
         }
         else if (strcmp(ParamName, "NetworkStatus") == 0)
         {
