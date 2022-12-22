@@ -1751,9 +1751,13 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
                 if (pGponData != NULL)
                 {
                     *puLong = pGponData->dml.PonMode;
-                    ret = TRUE;
                 }
             }
+            else
+            {
+            	*puLong = 0;
+            }
+            ret = TRUE;
         }
         else if (strcmp(ParamName, "StandardCompliance") == 0)
         {
