@@ -2173,7 +2173,19 @@ BOOL OntServ_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* 
                                 if_state[len - 1] = 0;
 
                             if (strcmp(if_state, "up") == 0)
+                            {
                                 *puLong = 0;
+
+                                if (pOntServ->uInstanceNumber == 0)
+                                {
+                                    char buf[8];
+                                    syscfg_get(NULL, "internet_service_enable", buf, sizeof(buf));
+                                    if (strcmp(buf, "0") == 0)
+                                    {
+                                        *puLong = 1;
+                                    }
+                                }
+                            }
                             else if (strcmp(if_state, "down") == 0)
                                 *puLong = 1;
                             else
