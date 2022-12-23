@@ -569,8 +569,9 @@ ANSC_STATUS GponMgrDml_addVeip(DML_VEIP_LIST_T* gponVeipList, int veip_index)
 
     description:
 
-        This function is called to retrieve the IP provisioning mode in management interface.
+        This function is called to retrieve the IP provisioning mode of management interface.
         IPProvisioningMode: Error(0), IPv4(1), IPv6(2), Dualstack(3).
+        Error(0) will be returned if management interface does not acquire any ip address.
 
     argument:
 
@@ -583,21 +584,32 @@ void Get_IPProvisioningMode(ULONG* puLong)
     char buffer[8];
     ULONG hasIPv4 = 0, hasIPv6 = 0;
     struct ifaddrs *ifaddr, *ifa;
+    char *if_name;
 
     //Initialize to 0 - Error
     *puLong = 0;
 
-    if((getifaddrs(&ifaddr) == 0) && (syscfg_get(NULL, "last_erouter_mode", buffer, sizeof(buffer)) == 0))
+    syscfg_get(NULL, "management_wan_enabled", buffer, sizeof(buffer));
+    if(strcmp(buffer, "1") == 0)
+    {
+        if_name = "mg0";
+    }
+    else
+    {
+        if_name = "erouter0";
+    }
+
+    if(getifaddrs(&ifaddr) == 0)
     {
         for(ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
         {
-            if(ifa->ifa_addr == NULL)
+            if(strcmp(ifa->ifa_name, if_name) == 0)
             {
-                continue;
-            }
+                if(ifa->ifa_addr == NULL)
+                {
+                    break;
+                }
 
-            if(strcmp(ifa->ifa_name, "erouter0") == 0)
-            {
                 if(ifa->ifa_addr->sa_family == AF_INET)
                 {
                     hasIPv4 = 1;
@@ -619,21 +631,15 @@ void Get_IPProvisioningMode(ULONG* puLong)
             }
         }
 
-        /*
-            Check if the eRouter interface is provisioned according to the erouter_mode in syscfg and return
-            IPProvisioningMode as IPv4, IPv6 and Dualstack respectively. If it is not provisioned correctly
-            return Error(0).
-        */
-
-        if((strcmp(buffer, "1") == 0) && (hasIPv4 == 1) && (hasIPv6 == 0))
+        if((hasIPv4 == 1) && (hasIPv6 == 0))
         {
             *puLong = 1;
         }
-        else if((strcmp(buffer, "2") == 0) && (hasIPv4 == 0) && (hasIPv6 == 1))
+        else if((hasIPv4 == 0) && (hasIPv6 == 1))
         {
             *puLong = 2;
         }
-        else if((strcmp(buffer, "3") == 0) && (hasIPv4 == 1) && (hasIPv6 == 1))
+        else if((hasIPv4 == 1) && (hasIPv6 == 1))
         {
             *puLong = 3;
         }
