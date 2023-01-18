@@ -46,6 +46,7 @@
 #if     CFG_USE_CCSP_SYSLOG
     #include <ccsp_syslog.h>
 #endif
+#include "secure_wrapper.h"
 
 
 
@@ -1709,8 +1710,33 @@ BOOL X_LGI_COM_ONT_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,UL
         else if (strcmp(ParamName, "NetworkStatus") == 0)
         {
             char veip_state[16];
-            FILE *f = fopen("/sys/class/net/veip0/operstate", "r");
+#ifdef _COSA_BCM_ARM_
+            char wan_type[32];
+            FILE *f = v_secure_popen("r", "scratchpadctl dump RdpaWanType");
 
+            wan_type[0] = '\0';
+            if (f != NULL)
+            {
+                fgets(wan_type, sizeof(wan_type), f);
+                char *p = strrchr(wan_type, '\n');
+                if (p)
+                {
+                    *p = '\0';
+                }
+                v_secure_pclose(f);
+            }
+
+            if (strcmp(wan_type, "GBE") == 0)
+            {
+                f = fopen("/sys/class/net/eth0/operstate", "r");
+            }
+            else
+            {
+                f = fopen("/sys/class/net/veip0/operstate", "r");
+            }
+#else
+            FILE *f = fopen("/sys/class/net/veip0/operstate", "r");
+#endif
             if (f != NULL)
             {
                 if (fgets(veip_state, sizeof(veip_state), f) != NULL)
