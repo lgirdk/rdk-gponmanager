@@ -969,7 +969,7 @@ BOOL GponPloam_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG*
                 *puLong= pGponPloam->MicErrors;
                 ret = TRUE;
             }
-#if !defined(WAN_MANAGER_UNIFICATION_ENABLED)
+#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
             else if( AnscEqualString(ParamName, "TO1Timer", TRUE))
             {
                 *puLong= pGponPloam->TO1Timer;
