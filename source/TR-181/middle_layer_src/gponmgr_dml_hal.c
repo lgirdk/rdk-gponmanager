@@ -21,6 +21,8 @@
 *****************************************************************************/
 #include <json-c/json.h>
 #include <limits.h>
+#include <syscfg/syscfg.h>
+
 /*****************************************************************************
 * PROJECT-SPECIFIC INCLUDE FILES
 *****************************************************************************/
@@ -28,9 +30,6 @@
 #include "ansc_platform.h"
 
 #include "gpon_apis.h"
-#if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-#include "syscfg.h"
-#endif
 #include "gponmgr_dml_hal.h"
 #include "gponmgr_dml_hal_param.h"
 #include "gponmgr_link_state_machine.h"
@@ -100,10 +99,6 @@ ANSC_STATUS GponHal_Init()
 {
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
     char wan_type[32] = {0};
-
-    // Initialise syscfg
-    if (syscfg_init() < 0)
-         CcspTraceError(("failed to initialise syscfg"));
 
     v_secure_system("/bin/json_hal_server_gpon /etc/rdk/conf/gpon_manager_conf.json &");
 #endif
