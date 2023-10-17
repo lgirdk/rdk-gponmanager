@@ -267,12 +267,12 @@ ULONG GponPhy_GetParamStringValue(ANSC_HANDLE hInsContext,char* ParamName,char* 
                 ret = 0;
             }
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            else if( AnscEqualString(ParamName, "Alias", TRUE))
+            else if (strcmp(ParamName, "Alias") == 0)
             {
                 AnscCopyString(pValue, pGponPhy->Alias);
                 ret = 0;
             }
-            else if( AnscEqualString(ParamName, "LowerLayers", TRUE))
+            else if (strcmp(ParamName, "LowerLayers") == 0)
             {
                 AnscCopyString(pValue, pGponPhy->LowerLayers);
                 ret = 0;
@@ -300,7 +300,7 @@ BOOL GponPhy_SetParamStringValue(ANSC_HANDLE hInsContext, char* ParamName, char*
         {
             DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
 
-            if( AnscEqualString(ParamName, "Alias", TRUE))
+            if (strcmp(ParamName, "Alias") == 0)
             {
 		if (AnscSizeOfString(pString) >= sizeof(pGponPhy->Alias))
         	{
@@ -317,7 +317,7 @@ BOOL GponPhy_SetParamStringValue(ANSC_HANDLE hInsContext, char* ParamName, char*
                     ret = TRUE;
                 }
             }
-            else if( AnscEqualString(ParamName, "LowerLayers", TRUE))
+            else if (strcmp(ParamName, "LowerLayers") == 0)
             {
                 if (AnscSizeOfString(pString) >= sizeof(pGponPhy->LowerLayers))
                 {
@@ -391,7 +391,7 @@ BOOL GponPhy_GetParamUlongValue (ANSC_HANDLE hInsContext,char* ParamName,ULONG* 
                 ret = TRUE;
             }
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            else if( AnscEqualString(ParamName, "LastChange", TRUE))
+            else if (strcmp(ParamName, "LastChange") == 0)
             {
                 *puLong = (ULONG) pGponPhy->LastChange;
                 ret = TRUE;
@@ -418,13 +418,13 @@ BOOL GponPhy_GetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL* pBo
         {
             DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
 
-            if( AnscEqualString(ParamName, "Enable", TRUE))
+            if (strcmp(ParamName, "Enable") == 0)
             {
                 *pBool = pGponPhy->Enable;
                 ret = TRUE;
             }
 
-            else if( AnscEqualString(ParamName, "Upstream", TRUE))
+            else if (strcmp(ParamName, "Upstream") == 0)
             {
                 *pBool = pGponPhy->Upstream;
                 ret = TRUE;
@@ -452,7 +452,7 @@ BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bVal
         {
             DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
 
-            if( AnscEqualString(ParamName, "Enable", TRUE))
+            if (strcmp(ParamName, "Enable") == 0)
             {
                 if (bValue==TRUE)
                 {
@@ -470,7 +470,7 @@ BOOL GponPhy_SetParamBoolValue(ANSC_HANDLE hInsContext,char* ParamName,BOOL bVal
                     ret = TRUE;
                 }
             }
-            else if( AnscEqualString(ParamName, "Upstream", TRUE))
+            else if (strcmp(ParamName, "Upstream") == 0)
             {
                 if (bValue==TRUE)
                 {
@@ -666,7 +666,7 @@ BOOL GponPhyVoltage_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int
             DML_PHY_MEDIA* pGponPhy = &(pGponCtrl->dml);
 
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            if( AnscEqualString(ParamName, "CurrentVoltage", TRUE))
+            if (strcmp(ParamName, "CurrentVoltage") == 0)
             {
                 *pInt = (int) pGponPhy->Voltage.CurrentVoltage;
                 ret = TRUE;
@@ -882,12 +882,12 @@ BOOL GponGtc_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG* p
                 ret = TRUE;
             }
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            else if( AnscEqualString(ParamName, "GtcTotalFecCodeWords", TRUE))
+            else if (strcmp(ParamName, "GtcTotalFecCodeWords") == 0)
             {
                 *puLong= pGponGtc->GtcTotalFecCodeWords;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "GtcHecErrorCount", TRUE))
+            else if (strcmp(ParamName, "GtcHecErrorCount") == 0)
             {
                 *puLong= pGponGtc->GtcHecErrorCount;
                 ret = TRUE;
@@ -970,12 +970,12 @@ BOOL GponPloam_GetParamUlongValue(ANSC_HANDLE hInsContext,char* ParamName,ULONG*
                 ret = TRUE;
             }
 #if !defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            else if( AnscEqualString(ParamName, "TO1Timer", TRUE))
+            else if (strcmp(ParamName, "TO1Timer") == 0)
             {
                 *puLong= pGponPloam->TO1Timer;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "TO2Timer", TRUE))
+            else if (strcmp(ParamName, "TO2Timer") == 0)
             {
                 *puLong= pGponPloam->TO2Timer;
                 ret = TRUE;
@@ -1366,12 +1366,12 @@ BOOL GponOmci_GetParamIntValue(ANSC_HANDLE hInsContext,char* ParamName,int* pInt
         if ( GponHal_get_omci(pGponOmci) == ANSC_STATUS_SUCCESS)
         {
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            if( AnscEqualString(ParamName, "BaselineMessageCount", TRUE))
+            if (strcmp(ParamName, "BaselineMessageCount") == 0)
             {
                 *pInt = (int) pGponOmci->BaselineMessageCount;
                 ret = TRUE;
             }
-            else if( AnscEqualString(ParamName, "ExtendedMessageCount", TRUE))
+            else if (strcmp(ParamName, "ExtendedMessageCount") == 0)
             {
                 *pInt = (int) pGponOmci->ExtendedMessageCount;
                 ret = TRUE;
@@ -1543,7 +1543,7 @@ BOOL GponVeip_GetParamUlongValue(ANSC_HANDLE hInsContext, char* ParamName, ULONG
             DML_VEIP* pGponVeip = &(pGponCtrl->dml);
 
 #if defined(WAN_MANAGER_UNIFICATION_ENABLED)
-            if( AnscEqualString(ParamName, "ManagedEntityId", TRUE))
+            if (strcmp(ParamName, "ManagedEntityId") == 0)
             {
                 *puLong = pGponVeip->ManagedEntityId;
                 ret = TRUE;
