@@ -213,7 +213,7 @@ ANSC_STATUS CosaDmlGponSetPhyStatusForWanManager(int iVeipIndex ,char *LowerLaye
 {
     char ParamName[256] = {0};
     char ParamVal[256] = {0};
-    char ifname[16] = {0};
+    char ifname[256] = {0};
     PDML_VEIP pGponVeip = NULL;
     INT iLinkInstance = -1;
     INT iWANInstance = -1;
@@ -241,7 +241,7 @@ ANSC_STATUS CosaDmlGponSetPhyStatusForWanManager(int iVeipIndex ,char *LowerLaye
             }
 
             //get Veip InterDomain Name
-            snprintf(ifname, MAX_STR_ARR_SIZE, "%s", pGponVeip->InterfaceName);
+            snprintf(ifname, sizeof(ifname), "%s", pGponVeip->InterfaceName);
         }
 
         GponMgrDml_GetData_release(pGponDmlData);
@@ -296,7 +296,7 @@ ANSC_STATUS Gponmgr_eth_addInterface(int iVeipIndex, char *LowerLayers, int *iVe
 {
     ANSC_STATUS ret = ANSC_STATUS_SUCCESS;
     char acSetParamName[MAX_STR_ARR_SIZE] = {0};
-    char iDomainName[MAX_STR_ARR_SIZE]    = {0};
+    char iDomainName[256] = {0};
     PDML_VEIP pGponVeip = NULL;
     INT iNewTableInstance = -1;
 
@@ -320,7 +320,7 @@ ANSC_STATUS Gponmgr_eth_addInterface(int iVeipIndex, char *LowerLayers, int *iVe
             }
 
             //get Veip Interface Name
-            snprintf(iDomainName, MAX_STR_ARR_SIZE, "%s", pGponVeip->InterfaceName);
+            snprintf(iDomainName, sizeof(iDomainName), "%s", pGponVeip->InterfaceName);
         }
 
         GponMgrDml_GetData_release(pGponDmlData);
