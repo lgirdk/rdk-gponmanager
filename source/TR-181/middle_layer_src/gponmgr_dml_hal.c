@@ -652,6 +652,8 @@ ANSC_STATUS GponHal_get_tr69(PDML_TR69 pTr69)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -715,6 +717,8 @@ ANSC_STATUS GponHal_get_omci(PDML_OMCI pOmci)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -780,6 +784,8 @@ ANSC_STATUS GponHal_get_ploam(PDML_PLOAM pPloam)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -846,6 +852,8 @@ ANSC_STATUS GponHal_get_gtc(PDML_GTC pGtc)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -898,6 +906,8 @@ ANSC_STATUS GponHal_get_pm(DML_PHY_MEDIA_LIST_T* pPhysicalMediaList)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -975,6 +985,8 @@ ANSC_STATUS GponHal_get_gem(DML_GEM_LIST_T* pGponGemList)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
@@ -1052,6 +1064,8 @@ ANSC_STATUS GponHal_get_veip(DML_VEIP_LIST_T* pGponVeipList)
     if (json_hal_client_send_and_get_reply(jrequest, &jreply_msg) == RETURN_ERR)
     {
         fprintf(stderr,"%s - %d Failed to get reply for the json request \n", __FUNCTION__, __LINE__);
+        FREE_JSON_OBJECT(jrequest);
+        FREE_JSON_OBJECT(jreply_msg);
         return ANSC_STATUS_FAILURE;
     }
 
