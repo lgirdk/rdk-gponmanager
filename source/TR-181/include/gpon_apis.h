@@ -485,4 +485,15 @@ _DML_X_RDK_GPON_DEVICE
 }
 DML_X_RDK_GPON_DEVICE,  *PDML_X_RDK_GPON_DEVICE;
 
+typedef struct
+_DML_GPONLOGS
+{
+    ULONG                           Index;
+    ULONG                           EventID;
+    ULONG                           EventLevel;
+    CHAR                            Time[64];
+    CHAR                            Description[512];
+}
+DML_GPONLOGS, *PDML_GPONLOGS;
+
 #endif
