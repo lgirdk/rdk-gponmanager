@@ -268,4 +268,16 @@ ULONG OptInter_Rollback(ANSC_HANDLE hInsContext);
 
 ULONG DeviceInfo_GetParamStringValue(ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize);
 
+ULONG Gpon_Logs_GetEntryCount (ANSC_HANDLE hInsContext);
+
+ANSC_HANDLE Gpon_Logs_GetEntry (ANSC_HANDLE hInsContext, ULONG nIndex, ULONG *pInsNumber);
+
+BOOL Gpon_Logs_IsUpdated (ANSC_HANDLE hInsContext);
+
+ULONG Gpon_Logs_Synchronize (ANSC_HANDLE hInsContext);
+
+BOOL Gpon_Logs_GetParamUlongValue (ANSC_HANDLE hInsContext, char *ParamName, ULONG *puLong);
+
+ULONG Gpon_Logs_GetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize);
+
 #endif
