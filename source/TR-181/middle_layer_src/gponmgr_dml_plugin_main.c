@@ -434,6 +434,13 @@ int ANSC_EXPORT_API GponMgrDml_Init(ULONG uMaxVersionSupported, void* hCosaPlugI
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Validate", OptInter_Validate);
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "OptInter_Rollback", OptInter_Rollback);
 
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_Synchronize", Gpon_Logs_Synchronize);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_IsUpdated", Gpon_Logs_IsUpdated);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_GetEntryCount", Gpon_Logs_GetEntryCount);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_GetEntry", Gpon_Logs_GetEntry);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_GetParamUlongValue", Gpon_Logs_GetParamUlongValue);
+    pPlugInfo->RegisterFunction(pPlugInfo->hContext, "Gpon_Logs_GetParamStringValue", Gpon_Logs_GetParamStringValue);
+
     pPlugInfo->RegisterFunction(pPlugInfo->hContext, "DeviceInfo_GetParamStringValue", DeviceInfo_GetParamStringValue);
 
     /* Create backend framework */
