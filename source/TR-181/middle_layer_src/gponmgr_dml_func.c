@@ -2778,3 +2778,51 @@ ULONG DeviceInfo_GetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, 
     return result;
 }
  
+ULONG Gpon_Logs_GetEntryCount (ANSC_HANDLE hInsContext)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+
+    return 0;
+}
+
+ANSC_HANDLE Gpon_Logs_GetEntry (ANSC_HANDLE hInsContext, ULONG nIndex, ULONG *pInsNumber)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+    UNREFERENCED_PARAMETER(nIndex);
+    UNREFERENCED_PARAMETER(pInsNumber);
+
+    return NULL;
+}
+
+BOOL Gpon_Logs_IsUpdated (ANSC_HANDLE hInsContext)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+
+    return FALSE;
+}
+
+ULONG Gpon_Logs_Synchronize (ANSC_HANDLE hInsContext)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+
+    return ANSC_STATUS_SUCCESS;
+}
+
+BOOL Gpon_Logs_GetParamUlongValue (ANSC_HANDLE hInsContext, char *ParamName, ULONG *puLong)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+    UNREFERENCED_PARAMETER(ParamName);
+    UNREFERENCED_PARAMETER(puLong);
+
+    return FALSE;
+}
+
+ULONG Gpon_Logs_GetParamStringValue (ANSC_HANDLE hInsContext, char *ParamName, char *pValue, ULONG *pUlSize)
+{
+    UNREFERENCED_PARAMETER(hInsContext);
+    UNREFERENCED_PARAMETER(ParamName);
+    UNREFERENCED_PARAMETER(pValue);
+    UNREFERENCED_PARAMETER(pUlSize);
+
+    return -1;
+}
